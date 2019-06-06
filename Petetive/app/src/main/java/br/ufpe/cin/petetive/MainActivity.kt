@@ -6,12 +6,14 @@ import android.support.design.widget.BottomNavigationView
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
 import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
 
 
     var mBottomNav: BottomNavigationView? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
