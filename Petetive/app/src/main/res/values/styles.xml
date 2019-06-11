@@ -21,7 +21,6 @@
     </style>
     
     <style name="editText_login">
-        <item name="android:textColor">@color/corPrimaria</item>
         <item name="colorControlActivated">@color/corPrimaria</item>
         <item name="colorControlHighlight">@color/corPrimaria</item>
     </style>

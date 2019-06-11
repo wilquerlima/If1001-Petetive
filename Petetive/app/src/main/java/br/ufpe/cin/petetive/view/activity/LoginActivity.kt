@@ -1,20 +1,17 @@
-package br.ufpe.cin.petetive
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
-import android.os.PersistableBundle
-import android.view.View
-import kotlinx.android.synthetic.main.login_activity.*
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import android.widget.Toast
-import android.util.Log
-import android.text.TextUtils
+package br.ufpe.cin.petetive.view.activity
+
 import android.content.Intent
+import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
+import android.text.TextUtils
+import android.view.View
+import android.widget.Toast
+import br.ufpe.cin.petetive.R
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.login_activity.*
 
 
-
-
-class LoginActivity  : AppCompatActivity(),View.OnClickListener{
+class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     private val TAG = "FirebaseEmailPassword"
 
@@ -33,14 +30,10 @@ class LoginActivity  : AppCompatActivity(),View.OnClickListener{
     }
 
     override fun onClick(view: View?) {
-        val i = view!!.id
-
-        if (i == R.id.btn_email_create_account) {
-            createAccount(edtEmail.text.toString(), edtPassword.text.toString())
-        } else if (i == R.id.btn_email_sign_in) {
-            signIn(edtEmail.text.toString(), edtPassword.text.toString())
-        } else if (i == R.id.btn_sign_out) {
-            signOut()
+        when (view?.id) {
+            R.id.btn_email_create_account -> createAccount(edtEmail.text.toString(), edtPassword.text.toString())
+            R.id.btn_email_sign_in -> signIn(edtEmail.text.toString(), edtPassword.text.toString())
+            R.id.btn_sign_out -> signOut()
         }
     }
 
@@ -54,6 +47,7 @@ class LoginActivity  : AppCompatActivity(),View.OnClickListener{
                 if (task.isSuccessful) {
                     val it = Intent(this, MainActivity::class.java)
                     startActivity(it)
+                    finish()
                     // update UI with the signed-in user's information
 
                 }
@@ -70,6 +64,7 @@ class LoginActivity  : AppCompatActivity(),View.OnClickListener{
                 if (task.isSuccessful) {
                     val it = Intent(this, MainActivity::class.java)
                     startActivity(it)
+                    finish()
                     // update UI with the signed-in user's information
                     //val user = mAuth!!.getCurrentUser()
                     //updateUI(user)
@@ -96,7 +91,8 @@ class LoginActivity  : AppCompatActivity(),View.OnClickListener{
         }
 
         if (password.length < 6) {
-            Toast.makeText(applicationContext, "Password too short, enter minimum 6 characters!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, "Password too short, enter minimum 6 characters!", Toast.LENGTH_SHORT)
+                .show()
             return false
         }
 
