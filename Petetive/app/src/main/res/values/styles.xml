@@ -8,4 +8,22 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="button_login">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/corSecundaria</item>
+        <item name="android:background">@drawable/button_style_login</item>
+    </style>
+
+    <style name="button_cadastrar">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/corSecundaria</item>
+        <item name="android:background">@drawable/button_style_cadastrar</item>
+    </style>
+    
+    <style name="editText_login">
+        <item name="android:textColor">@color/corPrimaria</item>
+        <item name="colorControlActivated">@color/corPrimaria</item>
+        <item name="colorControlHighlight">@color/corPrimaria</item>
+    </style>
+
 </resources>

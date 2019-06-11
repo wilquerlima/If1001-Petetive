@@ -11,7 +11,7 @@
     <item
         android:id="@+id/menu_item_cadastrar"
         android:icon="@drawable/ic_writing"
-        android:title="@string/cadastrar_animal_menu"
+        android:title="@string/cadastrar_txt"
         app:showAsAction="ifRoom"/>
 
     <item
