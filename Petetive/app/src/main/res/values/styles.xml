@@ -1,11 +1,25 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/corPrimaria</item>
         <item name="colorPrimaryDark">@color/corPrimaria</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="button_login">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/corSecundaria</item>
+        <item name="android:background">@drawable/button_style_login</item>
+    </style>
+
+    <style name="button_cadastrar">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/corSecundaria</item>
+        <item name="android:background">@drawable/button_style_cadastrar</item>
+    </style>
+    
+    <style name="editText_login">
+        <item name="colorControlActivated">@color/corSecundaria</item>
+        <item name="colorControlHighlight">@color/corSecundaria</item>
     </style>
 
 </resources>

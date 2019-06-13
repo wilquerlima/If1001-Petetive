@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "908672996250",
+    "firebase_url": "https://petetive.firebaseio.com",
+    "project_id": "petetive",
+    "storage_bucket": "petetive.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:908672996250:android:7a555bfb89cb5a1a",
+        "android_client_info": {
+          "package_name": "br.ufpe.cin.petetive"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "908672996250-eh58g6nam7cpkftgn19kvdt8jdadov3h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.ufpe.cin.petetive",
+            "certificate_hash": "06c05843248e5a7f1a3633f893df95773b3b4489"
+          }
+        },
+        {
+          "client_id": "908672996250-cod36ai46inn9l4gdcahhl4sb419hon0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjJKeVg-3alxlSLaow54GTjE5ivbnWXdM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "908672996250-cod36ai46inn9l4gdcahhl4sb419hon0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
