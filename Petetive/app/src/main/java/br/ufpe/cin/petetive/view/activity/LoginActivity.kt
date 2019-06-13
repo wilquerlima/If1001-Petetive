@@ -1,10 +1,12 @@
 package br.ufpe.cin.petetive.view.activity
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.View
+import android.view.WindowManager
 import android.widget.Toast
 import br.ufpe.cin.petetive.R
 import com.google.firebase.auth.FirebaseAuth
@@ -26,7 +28,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
         mAuth = FirebaseAuth.getInstance()
 
-
+        //window.statusBarColor = Color.TRANSPARENT
+        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
     }
 
     override fun onClick(view: View?) {
