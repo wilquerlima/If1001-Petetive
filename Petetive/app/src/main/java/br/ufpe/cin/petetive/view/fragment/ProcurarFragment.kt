@@ -50,7 +50,6 @@ class ProcurarFragment : Fragment() {
 
         })
 
-
         return view
     }
 }
