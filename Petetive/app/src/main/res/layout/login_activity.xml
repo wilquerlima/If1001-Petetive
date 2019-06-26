@@ -16,67 +16,81 @@
         android:textColor="@color/corSecundaria"
         android:text="@string/app_name"
         android:textSize="50sp"
-        android:fontFamily="monospace"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/edtEmail" />
+        app:layout_constraintBottom_toTopOf="@+id/inputlayout1" />
 
-    <android.support.v7.widget.AppCompatEditText
-        android:id="@+id/edtEmail"
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/inputlayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email"
-        android:inputType="textEmailAddress"
         android:layout_marginStart="20dp"
-        android:drawablePadding="10dp"
         android:layout_marginEnd="20dp"
-        android:theme="@style/editText_login"
-        android:textColor="@color/corSecundaria"
-        android:paddingBottom="20dp"
-        android:textColorHint="@color/corSecundaria"
-        android:drawableStart="@drawable/ic_email"
+        android:theme="@style/TextLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.4" />
+        app:layout_constraintVertical_bias="0.4">
 
-    <android.support.v7.widget.AppCompatEditText
-        android:id="@+id/edtPassword"
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/edtEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:drawablePadding="10dp"
+            android:theme="@style/editText_login"
+            android:textColor="@color/corSecundaria"
+            android:textColorHint="@color/corSecundaria"
+            android:drawableStart="@drawable/ic_email" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/inputlayout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Senha"
-        android:drawableStart="@drawable/ic_senha"
-        android:textColorHint="@color/corSecundaria"
-        android:drawablePadding="10dp"
-        android:theme="@style/editText_login"
-        android:textColor="@color/corSecundaria"
-        android:paddingBottom="20dp"
-        android:inputType="textPassword"
         android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/edtEmail"
-        app:layout_constraintEnd_toEndOf="@+id/edtEmail"
-        app:layout_constraintStart_toStartOf="@+id/edtEmail" />
+        android:theme="@style/TextLabel"
+        app:layout_constraintTop_toBottomOf="@+id/inputlayout1"
+        app:layout_constraintEnd_toEndOf="@+id/inputlayout1"
+        app:layout_constraintStart_toStartOf="@+id/inputlayout1"
+        app:passwordToggleTint="@color/corSecundaria"
+        app:passwordToggleEnabled="true">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/edtPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Senha"
+            android:drawableStart="@drawable/ic_senha"
+            android:textColorHint="@color/corSecundaria"
+            android:drawablePadding="10dp"
+            android:theme="@style/editText_login"
+            android:textColor="@color/corSecundaria"
+            android:inputType="textPassword" />
+    </android.support.design.widget.TextInputLayout>
+
+
 
     <Button
         android:id="@+id/btn_email_sign_in"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         style="@style/button_login"
-        android:fontFamily="monospace"
         android:text="Entrar"
         android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/edtPassword"
-        app:layout_constraintEnd_toEndOf="@+id/edtPassword"
-        app:layout_constraintStart_toStartOf="@+id/edtPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/inputlayout2"
+        app:layout_constraintEnd_toEndOf="@+id/inputlayout2"
+        app:layout_constraintStart_toStartOf="@+id/inputlayout2" />
 
     <Button
         android:id="@+id/btn_email_create_account"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/cadastrar_txt"
-        android:fontFamily="monospace"
         android:layout_marginTop="10dp"
         style="@style/button_cadastrar"
         app:layout_constraintTop_toBottomOf="@+id/btn_email_sign_in"

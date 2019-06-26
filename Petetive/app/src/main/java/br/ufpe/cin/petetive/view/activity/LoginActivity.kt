@@ -1,7 +1,6 @@
 package br.ufpe.cin.petetive.view.activity
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
@@ -9,6 +8,8 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import br.ufpe.cin.petetive.R
+import br.ufpe.cin.petetive.controller.FirebaseMethods
+import br.ufpe.cin.petetive.data.User
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.login_activity.*
 
@@ -16,8 +17,8 @@ import kotlinx.android.synthetic.main.login_activity.*
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     private val TAG = "FirebaseEmailPassword"
+    private lateinit var mAuth: FirebaseAuth
 
-    private var mAuth: FirebaseAuth? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_activity)
@@ -27,6 +28,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         btn_verify_email.setOnClickListener(this)
 
         mAuth = FirebaseAuth.getInstance()
+
 
         //window.statusBarColor = Color.TRANSPARENT
         window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
@@ -45,10 +47,15 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             return
         }
 
-        mAuth!!.createUserWithEmailAndPassword(email, password)
+        mAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    val it = Intent(this, MainActivity::class.java)
+                    val currentUser = mAuth.currentUser
+                    val user = User("",currentUser?.email!!)
+                    FirebaseMethods.userRef.child(currentUser.uid).setValue(user)
+
+                    val it = Intent(this, HomeActivity::class.java)
+                    it.putExtra("uid",task.result?.user?.uid)
                     startActivity(it)
                     finish()
                     // update UI with the signed-in user's information
@@ -62,21 +69,25 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             return
         }
 
-        mAuth!!.signInWithEmailAndPassword(email, password)
+        mAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    val it = Intent(this, MainActivity::class.java)
+                    val currentUser = mAuth.currentUser
+                    val user = User("",currentUser?.email!!)
+                    FirebaseMethods.userRef.child(currentUser.uid).setValue(user)
+
+                    val it = Intent(this, HomeActivity::class.java)
+                    it.putExtra("uid",currentUser.uid)
                     startActivity(it)
                     finish()
                     // update UI with the signed-in user's information
-                    //val user = mAuth!!.getCurrentUser()
                     //updateUI(user)
                 }
             }
     }
 
     private fun signOut() {
-        mAuth!!.signOut()
+        mAuth.signOut()
 
     }
 
