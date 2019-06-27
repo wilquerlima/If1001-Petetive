@@ -11,6 +11,7 @@ import br.ufpe.cin.petetive.data.User
 import br.ufpe.cin.petetive.view.fragment.CadastrarFragment
 import br.ufpe.cin.petetive.view.fragment.MapFragment
 import br.ufpe.cin.petetive.view.fragment.ProcurarFragment
+import br.ufpe.cin.petetive.view.fragment.UserFragment
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -58,6 +59,11 @@ class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             R.id.menu_item_map -> {
                 supportFragmentManager.beginTransaction().apply {
                     replace(R.id.framelayout, MapFragment())
+                }.commit()
+            }
+            R.id.menu_item_user -> {
+                supportFragmentManager.beginTransaction().apply {
+                    replace(R.id.framelayout, UserFragment())
                 }.commit()
             }
         }
