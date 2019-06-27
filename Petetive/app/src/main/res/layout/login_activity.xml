@@ -86,6 +86,17 @@
         app:layout_constraintEnd_toEndOf="@+id/inputlayout2"
         app:layout_constraintStart_toStartOf="@+id/inputlayout2" />
 
+    <ProgressBar
+        android:id="@+id/progressLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:indeterminateTint="@color/corSecundaria"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_email_sign_in"
+        app:layout_constraintEnd_toEndOf="@+id/btn_email_sign_in"
+        app:layout_constraintTop_toTopOf="@+id/btn_email_sign_in"
+        app:layout_constraintStart_toStartOf="@+id/btn_email_sign_in" />
+
     <Button
         android:id="@+id/btn_email_create_account"
         android:layout_width="0dp"
@@ -96,6 +107,17 @@
         app:layout_constraintTop_toBottomOf="@+id/btn_email_sign_in"
         app:layout_constraintEnd_toEndOf="@+id/btn_email_sign_in"
         app:layout_constraintStart_toStartOf="@+id/btn_email_sign_in" />
+
+    <ProgressBar
+        android:id="@+id/progressCadastrar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:indeterminateTint="@color/corSecundaria"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_email_create_account"
+        app:layout_constraintEnd_toEndOf="@+id/btn_email_create_account"
+        app:layout_constraintTop_toTopOf="@+id/btn_email_create_account"
+        app:layout_constraintStart_toStartOf="@+id/btn_email_create_account" />
 
     <Button
         android:id="@+id/btn_sign_out"

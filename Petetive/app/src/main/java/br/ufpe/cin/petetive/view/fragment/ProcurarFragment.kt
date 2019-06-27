@@ -11,17 +11,20 @@ import br.ufpe.cin.petetive.R
 import br.ufpe.cin.petetive.controller.FirebaseMethods
 import br.ufpe.cin.petetive.controller.ItemDecorationRecycler
 import br.ufpe.cin.petetive.controller.RecyclerViewAdapter
+import br.ufpe.cin.petetive.controller.RequestCallback
 import br.ufpe.cin.petetive.data.Pet
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import kotlinx.android.synthetic.main.procurar_fragment.*
 import kotlinx.android.synthetic.main.procurar_fragment.view.*
 import org.jetbrains.anko.support.v4.ctx
+import org.jetbrains.anko.support.v4.longToast
 
-class ProcurarFragment : Fragment() {
+class ProcurarFragment : Fragment(), RequestCallback {
 
     var rv: RecyclerView? = null
-    val petList : MutableList<Pet> = ArrayList()
+    var petList : MutableList<Pet> = ArrayList()
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -36,7 +39,7 @@ class ProcurarFragment : Fragment() {
         //val key = FirebaseMethods.petRef.push().key
         //FirebaseMethods.petRef.child(key!!).setValue(Pet("","Teste local", "Paulo", "Foi achado em Ouro Preto", "Fila Brasileiro", "3LJ5AO6H1JPlNi6cFZjYntldehY2", null))
 
-        FirebaseMethods.petRef.addValueEventListener(object : ValueEventListener{
+        /*FirebaseMethods.petRef.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
 
             }
@@ -48,8 +51,33 @@ class ProcurarFragment : Fragment() {
                 rv!!.adapter!!.notifyDataSetChanged()
             }
 
-        })
+        })*/
 
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        petList.clear()
+        FirebaseMethods.getPets(this)
+        progress.visibility = View.VISIBLE
+    }
+
+    override fun onSuccess(objects: Any) {
+        if(objects is MutableList<*>){
+            petList.addAll(objects.filterIsInstance<Pet>().toMutableList())
+        }
+
+        if(petList.isNullOrEmpty()){
+            longToast("Sem pets cadastrados")
+        } else {
+            rv!!.adapter!!.notifyDataSetChanged()
+        }
+        progress.visibility = View.GONE
+    }
+
+    override fun onError(msgError: String) {
+        progress.visibility = View.GONE
+        longToast(msgError)
     }
 }
