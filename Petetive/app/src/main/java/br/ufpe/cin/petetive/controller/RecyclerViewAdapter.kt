@@ -2,6 +2,9 @@ package br.ufpe.cin.petetive.controller
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,6 +45,16 @@ class RecyclerViewAdapter(
         }
     }
 
+    inline fun SpannableStringBuilder.withSpan(
+        span: Any,
+        action: SpannableStringBuilder.() -> Unit
+    ): SpannableStringBuilder {
+        val from = length
+        action()
+        setSpan(span, from, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        return this
+    }
+
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_animal, p0, false))
     }
@@ -53,14 +66,27 @@ class RecyclerViewAdapter(
     override fun onBindViewHolder(p0: ViewHolder, p1: Int) {
         p0.loadImage(petList[p1].urlImage)
 
-        p0.txtLocalidade.text = String.format(context.getString(R.string.txtLocal), petList[p1].local)
-        if (!petList[p1].nome.isNullOrBlank()) {
-            p0.txtNome.text = String.format(context.getString(R.string.txtNome), petList[p1].nome)
+        val local = SpannableStringBuilder()
+            .withSpan(StyleSpan(android.graphics.Typeface.BOLD)) { append(context.getString(R.string.txtLocal)) }
+            .append(" " + petList[p1].local)
+        val nome = SpannableStringBuilder()
+            .withSpan(StyleSpan(android.graphics.Typeface.BOLD)) { append(context.getString(R.string.txtNome)) }
+            .append(" " + petList[p1].nome)
+        val raca = SpannableStringBuilder()
+            .withSpan(StyleSpan(android.graphics.Typeface.BOLD)) { append(context.getString(R.string.txtRaca)) }
+            .append(" " + petList[p1].raca)
+        val descricao = SpannableStringBuilder()
+            .withSpan(StyleSpan(android.graphics.Typeface.BOLD)) { append(context.getString(R.string.txtDescricao)) }
+            .append(" " + petList[p1].descricao)
+
+        p0.txtLocalidade.text = local
+        if (!petList[p1].nome.isBlank()) {
+            p0.txtNome.text = nome
         } else {
             p0.txtNome.visibility = View.GONE
         }
-        p0.txtDescricao.text = String.format(context.getString(R.string.txtDescricao), petList[p1].descricao)
-        p0.txtRaca.text = String.format(context.getString(R.string.txtRaca), petList[p1].raca)
+        p0.txtRaca.text = raca
+        p0.txtDescricao.text = descricao
     }
 
 

@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/corPrimaria</item>
@@ -16,7 +16,7 @@
         <item name="android:textColor">@color/corSecundaria</item>
         <item name="android:background">@drawable/button_style_cadastrar</item>
     </style>
-    
+
     <style name="editText_login">
         <item name="colorControlActivated">@color/corSecundaria</item>
         <item name="colorControlHighlight">@color/corSecundaria</item>
@@ -29,6 +29,32 @@
         <item name="colorAccent">@color/corSecundaria</item>
         <item name="colorControlNormal">@color/corSecundaria</item>
         <item name="colorControlActivated">@color/corSecundaria</item>
+    </style>
+
+    <style name="TextLimitStyle" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@color/corPrimaria</item>
+        <item name="android:textSize">17sp</item>
+    </style>
+
+    <style name="TextLabelCadastro" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textColorHint">#FF000000</item>
+        <item name="android:textColorHighlight">#FF000000</item>
+        <item name="android:textColorLink">#FF000000</item>
+        <item name="colorAccent">#FF000000</item>
+        <item name="colorControlNormal">#FF000000</item>
+        <item name="colorControlActivated">#FF000000</item>
+    </style>
+
+    <style name="FilleBoxCustom" parent="Base.Widget.MaterialComponents.TextInputLayout">
+        <item name="android:theme">@style/TextLabelCadastro</item>
+        <item name="boxBackgroundMode">outline</item>
+        <item name="boxBackgroundColor">@color/background</item>
+        <item name="boxCollapsedPaddingTop">10dp</item>
+        <item name="android:textColorHint">#FF000000</item>
+        <item name="boxCornerRadiusBottomStart">0dp</item>
+        <item name="boxCornerRadiusBottomEnd">0dp</item>
+        <item name="boxCornerRadiusTopStart">0dp</item>
+        <item name="boxCornerRadiusTopEnd">0dp</item>
     </style>
 
 </resources>

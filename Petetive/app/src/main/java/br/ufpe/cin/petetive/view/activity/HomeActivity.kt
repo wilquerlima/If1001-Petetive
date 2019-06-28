@@ -8,7 +8,7 @@ import android.view.MenuItem
 import br.ufpe.cin.petetive.R
 import br.ufpe.cin.petetive.controller.FirebaseMethods
 import br.ufpe.cin.petetive.data.User
-import br.ufpe.cin.petetive.view.fragment.CadastrarFragment
+import br.ufpe.cin.petetive.view.fragment.CadastrarPetFragment
 import br.ufpe.cin.petetive.view.fragment.MapFragment
 import br.ufpe.cin.petetive.view.fragment.ProcurarFragment
 import br.ufpe.cin.petetive.view.fragment.UserFragment
@@ -53,7 +53,7 @@ class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             }
             R.id.menu_item_cadastrar -> {
                 supportFragmentManager.beginTransaction().apply {
-                    replace(R.id.framelayout, CadastrarFragment())
+                    replace(R.id.framelayout, CadastrarPetFragment())
                 }.commit()
             }
             R.id.menu_item_map -> {

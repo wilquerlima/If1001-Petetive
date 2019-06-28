@@ -5,4 +5,5 @@
     <color name="corSecundaria">#FFFFFF</color>
     <color name="corTerciaria">#91C8E9</color>
     <color name="corCheckedMenu">#22205C</color>
+    <color name="background">#f2f2f2</color>
 </resources>

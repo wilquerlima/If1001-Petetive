@@ -66,7 +66,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                     btn_email_sign_in.text = ""
                 }else{
                     progressLogin.visibility = View.GONE
-                    btn_email_sign_in.text = "Entrar"
+                    btn_email_sign_in.text = getString(R.string.login)
                 }
             }
             2 -> {
@@ -75,7 +75,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                     btn_email_create_account.text = ""
                 }else{
                     progressCadastrar.visibility = View.GONE
-                    btn_email_create_account.text = "Cadastrar"
+                    btn_email_create_account.text = getString(R.string.cadastrar_txt)
                 }
             }
         }
