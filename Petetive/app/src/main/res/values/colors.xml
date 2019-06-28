@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
 
     <color name="corPrimaria">#0095DA</color>
     <color name="corSecundaria">#FFFFFF</color>
     <color name="corTerciaria">#91C8E9</color>
     <color name="corCheckedMenu">#22205C</color>
+    <color name="background">#f2f2f2</color>
 </resources>
