@@ -38,6 +38,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.support.v4.content.FileProvider
+import com.google.android.gms.tasks.OnSuccessListener
 import java.io.FileOutputStream
 import java.io.IOException
 import java.nio.file.Files.createFile
@@ -186,7 +187,7 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    fun abrirCamera(){
+    fun abrirCamera() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             takePictureIntent.resolveActivity(ctx.packageManager)?.also {
                 startActivityForResult(takePictureIntent, CHOOSE_CAMERA_CODE)
@@ -265,8 +266,31 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
                     val idPet = FirebaseMethods.petRef.push().key
 
                     var file = Uri.fromFile(File(path))
-                    val uploadTask = FirebaseMethods.storageRef.child("images/${idPet}/photo").putFile(selectedImage)
-                    
+                    val ref = FirebaseMethods.storageRef.child("images/$idPet/photo")
+
+                    //desse jeito funciona, mas eu acho que demorou um pouco
+                    val uploadTask = ref.putFile(selectedImage).addOnSuccessListener {
+                        ref.downloadUrl.addOnSuccessListener {
+                            val url = it
+                        }.addOnFailureListener {
+
+                        }
+                    }
+
+                    //desse jeito é como ta na documentação, eu achei mais rapido
+                    //val uploadTask = ref.putFile(selectedImage)
+                    /*val url = uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
+                        if (!task.isSuccessful) {
+                            task.exception?.let {
+                                throw it
+                            }
+                        }
+                        return@Continuation FirebaseMethods.storageRef.child("images/$idPet/photo.png").downloadUrl
+                    }).addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            val downloadUri = it.result
+                        }
+                    }*/
 
 
                     Picasso.get()
@@ -331,10 +355,21 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
             }
         }.show()
     }
+
     private fun cadastrar() {
         val key = FirebaseMethods.petRef.push().key
 
         val usersId = FirebaseMethods.mAuth.currentUser?.uid.toString()
-        FirebaseMethods.petRef.child(key!!).setValue(Pet("",editLocal.text.toString(), editNome.text.toString(), editDescricao.text.toString(), editRaca.text.toString(), usersId, null))
+        FirebaseMethods.petRef.child(key!!).setValue(
+            Pet(
+                "",
+                editLocal.text.toString(),
+                editNome.text.toString(),
+                editDescricao.text.toString(),
+                editRaca.text.toString(),
+                usersId,
+                null
+            )
+        )
     }
 }
