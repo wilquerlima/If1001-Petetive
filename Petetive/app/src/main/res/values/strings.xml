@@ -6,8 +6,8 @@
     <string name="user_menu">Perfil</string>
     <string name="map_menu">Mapa</string>
 
-    <string name="txtLocal"><b>Local:</b></string>
-    <string name="txtNome"><b>Nome:</b></string>
-    <string name="txtDescricao"><b>Descrição:</b></string>
-    <string name="txtRaca"><b>Raça:</b></string>
+    <string name="txtLocal">Local:</string>
+    <string name="txtNome">Nome:</string>
+    <string name="txtDescricao">Descrição:</string>
+    <string name="txtRaca">Raça:</string>
 </resources>

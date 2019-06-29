@@ -60,7 +60,7 @@ class ProcurarFragment : Fragment(), RequestCallback {
         super.onResume()
         petList.clear()
         FirebaseMethods.getPets(this)
-        progress.visibility = View.VISIBLE
+        progress?.visibility = View.VISIBLE
     }
 
     override fun onSuccess(objects: Any) {
@@ -73,11 +73,11 @@ class ProcurarFragment : Fragment(), RequestCallback {
         } else {
             rv!!.adapter!!.notifyDataSetChanged()
         }
-        progress.visibility = View.GONE
+        progress?.visibility = View.GONE
     }
 
     override fun onError(msgError: String) {
-        progress.visibility = View.GONE
+        progress?.visibility = View.GONE
         longToast(msgError)
     }
 }
