@@ -13,10 +13,19 @@ import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileInputStream
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import br.ufpe.cin.petetive.R
 import com.squareup.picasso.Picasso
+import br.ufpe.cin.petetive.data.Pet
+import br.ufpe.cin.petetive.controller.FirebaseMethods
+import com.google.android.gms.tasks.Continuation
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.UploadTask
 import kotlinx.android.synthetic.main.cadastrar_pet_fragment.*
 import kotlinx.android.synthetic.main.cadastrar_pet_fragment.view.*
 import org.jetbrains.anko.*
@@ -45,8 +54,12 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
         when (p0?.id) {
             R.id.btn_cadastrar_pet -> {
                 setProgress(true)
+
+
                 if (checkValues()) {
-                    toast("passou")
+                    toast("Seu Pet foi Cadastrado com sucesso")
+                    cadastrar()
+
                     setProgress(false)
                 } else {
                     setProgress(false)
@@ -80,7 +93,7 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
                 false
             }
             editDescricao.text.toString().trim().isNullOrEmpty() -> {
-                editDescricao.error = "É necessário informar uma desrição."
+                editDescricao.error = "É necessário informar uma descrição."
                 false
             }
             editRaca.text.toString().trim().isNullOrEmpty() -> {
@@ -91,6 +104,7 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
         }
 
     }
+
 
     fun checkPermissions(permission : Int){
         when (permission) {
@@ -121,7 +135,14 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
                 CHOOSE_GALLERY_CODE -> {
                     dialog.dismiss()
                     val selectedImage = data!!.data
-                    //val path = selectedImage!!.path
+                    val path = selectedImage!!.path
+                    val idPet = FirebaseMethods.petRef.push().key
+
+                    var file = Uri.fromFile(File(path))
+                    val uploadTask = FirebaseMethods.storageRef.child("images/${idPet}/photo").putFile(selectedImage)
+                    
+
+
                     Picasso.get()
                         .load(selectedImage)
                         .error(R.mipmap.placeholder)
@@ -177,5 +198,11 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
 
             }
         }.show()
+    }
+    private fun cadastrar() {
+        val key = FirebaseMethods.petRef.push().key
+
+        val usersId = FirebaseMethods.mAuth.currentUser?.uid.toString()
+        FirebaseMethods.petRef.child(key!!).setValue(Pet("",editLocal.text.toString(), editNome.text.toString(), editDescricao.text.toString(), editRaca.text.toString(), usersId, null))
     }
 }

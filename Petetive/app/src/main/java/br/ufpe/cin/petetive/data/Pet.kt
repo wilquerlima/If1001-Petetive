@@ -2,6 +2,7 @@ package br.ufpe.cin.petetive.data
 
 import android.location.Location
 import com.google.firebase.database.IgnoreExtraProperties
+import java.io.Serializable
 
 @IgnoreExtraProperties
 data class Pet(
@@ -12,4 +13,4 @@ data class Pet(
     val raca: String = "",
     val uidUser: String = "",
     val location: Location? = null
-)
+) : Serializable

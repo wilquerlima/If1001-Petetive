@@ -1,6 +1,7 @@
 package br.ufpe.cin.petetive.controller
 
 import br.ufpe.cin.petetive.data.Pet
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -10,8 +11,9 @@ import com.google.firebase.storage.FirebaseStorage
 object FirebaseMethods{
 
     val database = FirebaseDatabase.getInstance()
+    val mAuth = FirebaseAuth.getInstance()
     val storageRef = FirebaseStorage.getInstance().reference
-    val imageRef = storageRef.child("images")
+    val imageRef = storageRef
     val userRef = database.getReference("users")
     val petRef = database.getReference("pet")
 
