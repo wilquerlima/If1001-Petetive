@@ -4,11 +4,9 @@ import android.app.Activity.RESULT_OK
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.drm.DrmStore
-import android.net.Uri
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
-import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
@@ -20,22 +18,40 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.cadastrar_pet_fragment.*
 import kotlinx.android.synthetic.main.cadastrar_pet_fragment.view.*
 import org.jetbrains.anko.*
-import org.jetbrains.anko.support.v4.act
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.support.v4.ctx
 import org.jetbrains.anko.support.v4.toast
+import java.io.File
+import com.squareup.picasso.NetworkPolicy
+import com.squareup.picasso.MemoryPolicy
+import android.annotation.SuppressLint
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.support.v4.content.FileProvider
+import java.io.FileOutputStream
+import java.io.IOException
+import java.nio.file.Files.createFile
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
+
 
 class CadastrarPetFragment : Fragment(), View.OnClickListener {
 
     val CHOOSE_CAMERA_CODE = 101
     val CHOOSE_GALLERY_CODE = 102
-    lateinit var dialog : DialogInterface
+    lateinit var dialog: DialogInterface
+    lateinit var currentPhotoPath: String
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.cadastrar_pet_fragment, container, false)
 
         view.btn_cadastrar_pet.setOnClickListener(this)
         view.default_foto.setOnClickListener(this)
+        view.photo.setOnClickListener(this)
 
 
         return view
@@ -46,7 +62,6 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
             R.id.btn_cadastrar_pet -> {
                 setProgress(true)
                 if (checkValues()) {
-                    toast("passou")
                     setProgress(false)
                 } else {
                     setProgress(false)
@@ -92,31 +107,141 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
 
     }
 
-    fun checkPermissions(permission : Int){
+    fun checkPermissions(permission: Int) {
         when (permission) {
             1 -> {
-
+                if (ContextCompat.checkSelfPermission(ctx, android.Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED
+                ) {
+                    requestPermissions(arrayOf(android.Manifest.permission.CAMERA), 2)
+                } else {
+                    abrirCamera()
+                }
             }
-            2 -> if (ContextCompat.checkSelfPermission(ctx, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED){
-                requestPermissions(arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
-            }else{
-                abrirGaleria()
+            2 -> {
+                if (ContextCompat.checkSelfPermission(ctx, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED
+                ) {
+                    requestPermissions(arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+                } else {
+                    abrirGaleria()
+                }
             }
         }
     }
 
-    fun abrirGaleria(){
+    private fun dispatchTakePictureIntent() {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            // Ensure that there's a camera activity to handle the intent
+            takePictureIntent.resolveActivity(ctx.packageManager)?.also {
+                // Create the File where the photo should go
+                val photoFile: File? = try {
+                    createImageFile()
+                } catch (ex: IOException) {
+                    // Error occurred while creating the File
+                    null
+                }
+                // Continue only if the File was successfully created
+                photoFile?.also {
+                    val photoURI: Uri = FileProvider.getUriForFile(
+                        ctx,
+                        "com.example.android.fileprovider",
+                        it
+                    )
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    startActivityForResult(takePictureIntent, CHOOSE_CAMERA_CODE)
+                }
+            }
+        }
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File = ctx.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+        return File.createTempFile(
+            "JPEG_${timeStamp}_", /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
+        ).apply {
+            // Save a file: path for use with ACTION_VIEW intents
+            currentPhotoPath = absolutePath
+        }
+    }
+
+    fun abrirCamera(){
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            takePictureIntent.resolveActivity(ctx.packageManager)?.also {
+                startActivityForResult(takePictureIntent, CHOOSE_CAMERA_CODE)
+            }
+        }
+        //dispatchTakePictureIntent()
+    }
+
+    fun abrirGaleria() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
         intent.type = "image/*"
         startActivityForResult(intent, CHOOSE_GALLERY_CODE)
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if(resultCode == RESULT_OK){
-            when(requestCode){
+        if (resultCode == RESULT_OK) {
+            when (requestCode) {
                 CHOOSE_CAMERA_CODE -> {
+                    dialog.dismiss()
+                    /*Picasso.get()
+                        .load(currentPhotoPath)
+                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+                        .networkPolicy(NetworkPolicy.NO_CACHE)
+                        .into(photo)*/
+                    val imageBitmap = data!!.extras!!.get("data") as Bitmap
+                    photo.setImageBitmap(imageBitmap)
+                    default_foto.visibility = View.GONE
+                    /*val bitmaps = BitmapFactory.decodeStream(contentResolver.openInputStream(imageUri))
+                    picture!!.setImageBitmap(bitmaps)
 
+                    */
+
+                    /*
+                    val extras = data!!.extras
+                    var bitmap: Bitmap? = null
+                    if (extras != null) {
+                        bitmap = extras.get("data") as Bitmap
+                    }
+                    val file :File
+                    file = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        val current = LocalDateTime.now()
+                        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm:ss")
+                        val answer: String =  current.format(formatter)
+                        File.createTempFile(answer, null, ctx.cacheDir)
+                    } else {
+                        val date = Date()
+                        val formatter = SimpleDateFormat("dd MMM yyyy HH:mma")
+                        val answer: String = formatter.format(date)
+                        File.createTempFile(answer, null, ctx.cacheDir)
+                    }
+                    val fileOutputStream: FileOutputStream
+                    try {
+                        fileOutputStream = FileOutputStream(file)
+                        assert(bitmap != null)
+                        bitmap!!.compress(Bitmap.CompressFormat.PNG, 80, fileOutputStream)
+                        fileOutputStream.close()
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+
+
+                    //exibe bitmap no img_artista
+                    Picasso.get().invalidate(file.path)
+                    Picasso.get()
+                        .load(file)
+                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+                        .networkPolicy(NetworkPolicy.NO_CACHE)
+                        .into(photo)
+                    default_foto.visibility = View.GONE*/
                 }
                 CHOOSE_GALLERY_CODE -> {
                     dialog.dismiss()
@@ -133,13 +258,19 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        when(requestCode){
-            1->{
-                if (grantResults.isNotEmpty() && grantResults.get(0) ==PackageManager.PERMISSION_GRANTED){
+        when (requestCode) {
+            1 -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     abrirGaleria()
+                } else {
+                    toast("You denied the permission")
                 }
-                else {
-                    toast( "You denied the permission")
+            }
+            2 -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    abrirCamera()
+                } else {
+                    toast("You denied the permission")
                 }
             }
         }
@@ -158,7 +289,7 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
                         marginStart = dip(10)
                         topMargin = dip(10)
                     }.setOnClickListener {
-
+                        checkPermissions(1)
                     }
                     button("Galeria") {
                         textColor = ContextCompat.getColor(ctx, R.color.corSecundaria)
