@@ -30,7 +30,6 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.support.v4.ctx
 import org.jetbrains.anko.support.v4.toast
-import java.io.File
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.MemoryPolicy
 import android.annotation.SuppressLint
@@ -73,12 +72,9 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
 
 
                 if (checkValues()) {
-<<<<<<< HEAD
                     toast("Seu Pet foi Cadastrado com sucesso")
                     cadastrar()
 
-=======
->>>>>>> 950d4a8a0ab2b1c2ab3cbe6b90ec4a29b3858013
                     setProgress(false)
                 } else {
                     setProgress(false)
@@ -124,12 +120,9 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
 
     }
 
-<<<<<<< HEAD
 
-    fun checkPermissions(permission : Int){
-=======
     fun checkPermissions(permission: Int) {
->>>>>>> 950d4a8a0ab2b1c2ab3cbe6b90ec4a29b3858013
+
         when (permission) {
             1 -> {
                 if (ContextCompat.checkSelfPermission(ctx, android.Manifest.permission.CAMERA)
