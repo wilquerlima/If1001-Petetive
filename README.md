@@ -13,3 +13,20 @@
 4-https://ninjamock.com/s/Z63TDDx link para o mockup(mockup, contem poucas telas pois para a ideia principal do app, elas sao as principais, isso não significa que so ira ter, aquelas).
 
 5- Como existem duas features maiores, interação com rede social e usar o Google maps para mostrar na lista os mais proximos, cada um ficara com uma dessa e ao decorrer do projeto, serão feitas as atividades a medida que for desenvolvendo o projeto.
+
+# Implementação
+
+                                                    -------Classes-------
+  
+CadastrarPetFragment: Esta classe é responsavel por gerenciar o cadastro do Pet, nela temos o metodo de cadastro, o metodo responsavel por
+gerenciar a foto(abrir da galeria ou tirar foto da camera) e tambem um metodo de validaçao dos dados do pet.
+
+HomeActivity: É onde está a tela principal do App, no metodo onNavigationItemSelected, temos a navegação do menu inverior atraves dos fragments(ProcurarFragment,CadastrarPetFragment,MapFragment,UserFragment).
+
+UserFragment: Onde é detalhado o perfil do usuario, informando seus dados. tal como, email, nome, telefone...etc
+
+
+
+                                                   -------link demonstração video------
+                                                   
+                                                   -------download APK google play------
