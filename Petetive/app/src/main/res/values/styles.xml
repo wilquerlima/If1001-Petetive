@@ -45,6 +45,15 @@
         <item name="colorControlActivated">#FF000000</item>
     </style>
 
+    <style name="TextLabelPerfil" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textColorHint">@color/corPrimaria</item>
+        <item name="android:textColorHighlight">@color/corPrimaria</item>
+        <item name="android:textColorLink">@color/corPrimaria</item>
+        <item name="colorAccent">@color/corPrimaria</item>
+        <item name="colorControlNormal">@color/corPrimaria</item>
+        <item name="colorControlActivated">@color/corPrimaria</item>
+    </style>
+
     <style name="FilleBoxCustom" parent="Base.Widget.MaterialComponents.TextInputLayout">
         <item name="android:theme">@style/TextLabelCadastro</item>
         <item name="boxBackgroundMode">outline</item>

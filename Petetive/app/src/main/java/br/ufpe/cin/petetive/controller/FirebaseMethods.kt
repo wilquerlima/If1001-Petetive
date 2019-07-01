@@ -32,4 +32,7 @@ object FirebaseMethods{
             }
         })
     }
+
+    fun atualizarUser(requestCallback: RequestCallback){
+    }
 }

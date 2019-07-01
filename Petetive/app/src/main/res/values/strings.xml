@@ -10,4 +10,8 @@
     <string name="txtNome">Nome:</string>
     <string name="txtDescricao">Descrição:</string>
     <string name="txtRaca">Raça:</string>
+    <string name="hint_telefone">Telefone</string>
+    <string name="email">Email</string>
+    <string name="nome">Nome</string>
+    <string name="atualizar">Atualizar</string>
 </resources>

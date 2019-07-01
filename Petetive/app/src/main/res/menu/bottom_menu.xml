@@ -23,8 +23,9 @@
     <item
         android:id="@+id/menu_item_user"
         android:icon="@drawable/ic_user"
+        app:actionLayout="@layout/custom_perfil"
         android:title="@string/user_menu"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 
 
 </menu>

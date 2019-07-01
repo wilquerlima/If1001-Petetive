@@ -5,6 +5,7 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import br.ufpe.cin.petetive.R
 import br.ufpe.cin.petetive.controller.FirebaseMethods
 import br.ufpe.cin.petetive.data.User
@@ -15,6 +16,7 @@ import br.ufpe.cin.petetive.view.fragment.UserFragment
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import kotlinx.android.synthetic.main.custom_perfil.*
 
 class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -50,21 +52,25 @@ class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 supportFragmentManager.beginTransaction().apply {
                     replace(R.id.framelayout, ProcurarFragment())
                 }.commit()
+                //setUpBadge()
             }
             R.id.menu_item_cadastrar -> {
                 supportFragmentManager.beginTransaction().apply {
                     replace(R.id.framelayout, CadastrarPetFragment())
                 }.commit()
+                //setUpBadge()
             }
             R.id.menu_item_map -> {
                 supportFragmentManager.beginTransaction().apply {
                     replace(R.id.framelayout, MapFragment())
                 }.commit()
+                //setUpBadge()
             }
             R.id.menu_item_user -> {
                 supportFragmentManager.beginTransaction().apply {
                     replace(R.id.framelayout, UserFragment())
                 }.commit()
+                //setUpBadge()
             }
         }
         return true
@@ -82,5 +88,15 @@ class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         } else {
             super.onBackPressed()
         }
+    }
+
+    private fun setUpBadge(){
+        //if(cart_badge != null){
+            if(user?.email.isNullOrBlank() || user?.telefone.isNullOrBlank() || user?.nome.isNullOrEmpty()){
+                cart_badge.visibility = View.VISIBLE
+            }else {
+                cart_badge.visibility = View.GONE
+            }
+        //}
     }
 }
