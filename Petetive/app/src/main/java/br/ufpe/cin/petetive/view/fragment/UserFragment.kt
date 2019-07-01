@@ -12,10 +12,12 @@ import br.ufpe.cin.petetive.controller.RequestCallback
 import br.ufpe.cin.petetive.controller.Session
 import br.ufpe.cin.petetive.controller.Session.userLogged
 import br.ufpe.cin.petetive.data.User
+import br.ufpe.cin.petetive.view.activity.HomeActivity
 import kotlinx.android.synthetic.main.user_fragment.*
 import kotlinx.android.synthetic.main.user_fragment.view.*
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.okButton
+import org.jetbrains.anko.support.v4.act
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.support.v4.longToast
 import org.jetbrains.anko.yesButton
@@ -38,6 +40,7 @@ class UserFragment : Fragment(), RequestCallback {
         return view
     }
 
+
     override fun onResume() {
         super.onResume()
         setCampos()
@@ -45,7 +48,9 @@ class UserFragment : Fragment(), RequestCallback {
 
     override fun onSuccess(objects: Any) {
         alert("Dados atualizados com sucesso!") {
-            okButton { }
+            okButton { (act as HomeActivity).changeToFirstFragment() }
+        }.apply {
+            isCancelable = false
         }.show()
         setProgress(false)
     }
