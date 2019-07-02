@@ -31,6 +31,11 @@
             android:name=".view.activity.HomeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".view.activity.PetDetailsActivity"
+            android:label="@string/detalhes"
+            android:theme="@style/AppThemeActionBar"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

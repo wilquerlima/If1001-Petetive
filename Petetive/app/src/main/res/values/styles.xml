@@ -5,6 +5,11 @@
         <item name="colorPrimaryDark">@color/corPrimaria</item>
     </style>
 
+    <style name="AppThemeActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/corPrimaria</item>
+        <item name="colorPrimaryDark">@color/corPrimaria</item>
+    </style>
+
     <style name="button_login">
         <item name="android:textSize">17sp</item>
         <item name="android:textColor">@color/corSecundaria</item>
@@ -64,6 +69,11 @@
         <item name="boxCornerRadiusBottomEnd">0dp</item>
         <item name="boxCornerRadiusTopStart">0dp</item>
         <item name="boxCornerRadiusTopEnd">0dp</item>
+    </style>
+
+    <style name="textview">
+        <item name="android:textSize">17sp</item>
+        <item name="android:color">#FF000000</item>
     </style>
 
 </resources>
