@@ -1,7 +1,12 @@
 package br.ufpe.cin.petetive.controller
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import br.ufpe.cin.petetive.controller.Session.userLogged
 import br.ufpe.cin.petetive.data.Pet
 import br.ufpe.cin.petetive.data.User
+import br.ufpe.cin.petetive.view.activity.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -17,6 +22,13 @@ object FirebaseMethods {
     val imageRef = storageRef
     val userRef = database.getReference("users")
     val petRef = database.getReference("pet")
+
+    fun signOut(context: Activity) {
+        mAuth.signOut()
+        userLogged = null
+        context.finish()
+        context.startActivity(Intent(context, LoginActivity::class.java))
+    }
 
     fun getPets(requestCallback: RequestCallback) {
         FirebaseMethods.petRef.addValueEventListener(object : ValueEventListener {

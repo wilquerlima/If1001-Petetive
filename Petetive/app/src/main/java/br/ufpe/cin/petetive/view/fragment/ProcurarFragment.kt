@@ -80,6 +80,6 @@ class ProcurarFragment : Fragment(), RequestCallback {
 
     override fun onError(msgError: String) {
         progress?.visibility = View.GONE
-        longToast(msgError)
+        //longToast(msgError)
     }
 }

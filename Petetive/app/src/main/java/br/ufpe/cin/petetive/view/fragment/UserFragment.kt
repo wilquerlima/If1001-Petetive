@@ -1,6 +1,5 @@
 package br.ufpe.cin.petetive.view.fragment
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -15,12 +14,11 @@ import br.ufpe.cin.petetive.data.User
 import br.ufpe.cin.petetive.view.activity.HomeActivity
 import kotlinx.android.synthetic.main.user_fragment.*
 import kotlinx.android.synthetic.main.user_fragment.view.*
-import org.jetbrains.anko.noButton
 import org.jetbrains.anko.okButton
 import org.jetbrains.anko.support.v4.act
 import org.jetbrains.anko.support.v4.alert
+import org.jetbrains.anko.support.v4.ctx
 import org.jetbrains.anko.support.v4.longToast
-import org.jetbrains.anko.yesButton
 
 class UserFragment : Fragment(), RequestCallback {
 
@@ -32,9 +30,12 @@ class UserFragment : Fragment(), RequestCallback {
         val view = inflater.inflate(R.layout.user_fragment, container, false)
 
         view.btn_atualizar_perfil.setOnClickListener {
-            setProgress(true)
             getCampos()
             FirebaseMethods.atualizarUser(User(nome,email,telefone),this)
+        }
+
+        view.logout.setOnClickListener{
+            FirebaseMethods.signOut(act)
         }
 
         return view
@@ -52,24 +53,10 @@ class UserFragment : Fragment(), RequestCallback {
         }.apply {
             isCancelable = false
         }.show()
-        setProgress(false)
     }
 
     override fun onError(msgError: String) {
-        setProgress(false)
         longToast(msgError)
-    }
-
-    private fun setProgress(active: Boolean) {
-        btn_atualizar_perfil.isEnabled = !active
-
-        if (active) {
-            progress_perfil?.visibility = View.VISIBLE
-            btn_atualizar_perfil.text = ""
-        } else {
-            progress_perfil?.visibility = View.GONE
-            btn_atualizar_perfil.text = getString(R.string.atualizar)
-        }
     }
 
     private fun setCampos(){

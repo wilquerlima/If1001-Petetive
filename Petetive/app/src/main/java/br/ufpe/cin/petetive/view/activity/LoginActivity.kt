@@ -89,7 +89,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             R.id.btn_email_sign_in -> {
                 signIn(edtEmail.text.toString(), edtPassword.text.toString())
             }
-            R.id.btn_sign_out -> signOut()
         }
     }
 
@@ -131,7 +130,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                 if (task.isSuccessful) {
                     val currentUser = mAuth.currentUser
                     val user = User("", currentUser?.email!!)
-                    FirebaseMethods.userRef.child(currentUser.uid).setValue(user)
+                    //FirebaseMethods.userRef.child(currentUser.uid).setValue(user)
 
                     val it = Intent(this, HomeActivity::class.java)
                     it.putExtra("uid", currentUser.uid)
@@ -144,12 +143,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
     }
-
-    private fun signOut() {
-        mAuth.signOut()
-
-    }
-
 
     private fun validateForm(email: String, password: String): Boolean {
 
