@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_layout"
@@ -22,12 +22,13 @@
         app:layout_constraintBottom_toTopOf="@+id/inputlayout1" />
 
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/inputlayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
+        style="@style/TextLabel"
         android:theme="@style/TextLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -35,24 +36,24 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.4">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email"
+            android:hint="@string/email"
             android:inputType="textEmailAddress"
             android:drawablePadding="10dp"
-            android:theme="@style/editText_login"
+            style="@style/Base.Widget.MaterialComponents.TextInputEditText"
             android:textColor="@color/corSecundaria"
-            android:textColorHint="@color/corSecundaria"
             android:drawableStart="@drawable/ic_email" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/inputlayout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        style="@style/TextLabel"
         android:theme="@style/TextLabel"
         app:layout_constraintTop_toBottomOf="@+id/inputlayout1"
         app:layout_constraintEnd_toEndOf="@+id/inputlayout1"
@@ -60,22 +61,22 @@
         app:passwordToggleTint="@color/corSecundaria"
         app:passwordToggleEnabled="true">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Senha"
             android:drawableStart="@drawable/ic_senha"
-            android:textColorHint="@color/corSecundaria"
             android:drawablePadding="10dp"
-            android:theme="@style/editText_login"
+            android:textColorHint="@color/corSecundaria"
+            style="@style/Base.Widget.MaterialComponents.TextInputEditText"
             android:textColor="@color/corSecundaria"
             android:inputType="textPassword" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
 
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_email_sign_in"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -97,7 +98,7 @@
         app:layout_constraintTop_toTopOf="@+id/btn_email_sign_in"
         app:layout_constraintStart_toStartOf="@+id/btn_email_sign_in" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_email_create_account"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -138,4 +139,4 @@
         app:layout_constraintTop_toBottomOf="@+id/btn_email_create_account" />
 
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

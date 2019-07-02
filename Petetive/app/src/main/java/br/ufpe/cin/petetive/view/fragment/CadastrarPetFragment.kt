@@ -7,8 +7,8 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
-import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.core.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import java.io.ByteArrayOutputStream
@@ -37,7 +37,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
-import android.support.v4.content.FileProvider
+import androidx.core.content.FileProvider
 import com.google.android.gms.tasks.OnSuccessListener
 import java.io.FileOutputStream
 import java.io.IOException
@@ -263,34 +263,32 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
                 CHOOSE_GALLERY_CODE -> {
                     dialog.dismiss()
                     val selectedImage = data!!.data
-                    val ref = FirebaseMethods.storageRef.child("images")
+                    val idPet = FirebaseMethods.petRef.push().key
+                    val ref = FirebaseMethods.storageRef.child("images/$idPet/photo.png")
 
                     //desse jeito funciona, mas eu acho que demorou um pouco
-                    val uploadTask = ref.putFile(selectedImage).addOnSuccessListener {
+                    /*val uploadTask = ref.putFile(selectedImage!!).addOnSuccessListener {
                         ref.downloadUrl.addOnSuccessListener {
-
-                            val url = it
-                            urlImagePet = url.toString()
+                            urlImagePet = it.toString()
 
                         }.addOnFailureListener {
 
                         }
-                    }
-
+                    }*/
                     //desse jeito é como ta na documentação, eu achei mais rapido
-                    //val uploadTask = ref.putFile(selectedImage)
-                    /*val url = uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
+                    val uploadTask = ref.putFile(selectedImage!!)
+                    uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
                         if (!task.isSuccessful) {
                             task.exception?.let {
                                 throw it
                             }
                         }
-                        return@Continuation FirebaseMethods.storageRef.child("images/$idPet/photo.png").downloadUrl
+                        return@Continuation ref.downloadUrl
                     }).addOnCompleteListener {
                         if (it.isSuccessful) {
-                            val downloadUri = it.result
+                            urlImagePet = it.result.toString()
                         }
-                    }*/
+                    }
 
 
                     Picasso.get()

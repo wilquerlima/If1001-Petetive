@@ -1,7 +1,7 @@
 package br.ufpe.cin.petetive.view.activity
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.View.GONE
 import br.ufpe.cin.petetive.R
 import br.ufpe.cin.petetive.data.Pet

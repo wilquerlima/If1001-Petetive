@@ -2,7 +2,7 @@ package br.ufpe.cin.petetive.view.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.View
 import android.view.WindowManager
@@ -131,7 +131,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                 if (task.isSuccessful) {
                     val currentUser = mAuth.currentUser
                     val user = User("", currentUser?.email!!)
-                    FirebaseMethods.userRef.child(currentUser.uid).setValue(user)
+                    //FirebaseMethods.userRef.child(currentUser.uid).setValue(user)
 
                     val it = Intent(this, HomeActivity::class.java)
                     it.putExtra("uid", currentUser.uid)

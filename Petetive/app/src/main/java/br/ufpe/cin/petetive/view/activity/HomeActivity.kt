@@ -2,12 +2,8 @@ package br.ufpe.cin.petetive.view.activity
 
 import android.app.ProgressDialog
 import android.os.Bundle
-import android.support.design.internal.BottomNavigationItemView
-import android.support.design.internal.BottomNavigationMenuView
-import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.view.LayoutInflater
+import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -21,10 +17,11 @@ import br.ufpe.cin.petetive.view.fragment.ProcurarFragment
 import br.ufpe.cin.petetive.view.fragment.UserFragment
 import org.jetbrains.anko.longToast
 import android.view.View.GONE
-import android.view.View.VISIBLE
 import br.ufpe.cin.petetive.controller.Session.userLogged
-
-
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener, RequestCallback {
@@ -57,9 +54,10 @@ class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         supportFragmentManager.beginTransaction().add(R.id.framelayout, fragment2,"2").hide(fragment2).commit()
         supportFragmentManager.beginTransaction().add(R.id.framelayout, fragment1,"1").commit()*/
 
-        mBottomNav = findViewById(R.id.bottom_navigation)
+        mBottomNav = bottom_navigation
         mBottomNav?.setOnNavigationItemSelectedListener(this)
         mBottomNav?.selectedItemId = R.id.menu_item_procurar
+
     }
 
     private fun setProgress(active : Boolean){
@@ -146,15 +144,18 @@ class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         if (user?.email.isNullOrBlank() || user?.telefone.isNullOrBlank() || user?.nome.isNullOrEmpty()) {
 
-            notificationBadge = LayoutInflater.from(this).inflate(R.layout.custom_perfil, menuView, false)
-            itemView.addView(notificationBadge)
+            /*notificationBadge = LayoutInflater.from(this).inflate(R.layout.custom_perfil, menuView, false)
+            itemView.addView(notificationBadge)*/
+            mBottomNav!!.showBadge(R.id.menu_item_user)
 
 
         } else {
+            mBottomNav!!.removeBadge(R.id.menu_item_user)
             if (this::notificationBadge.isInitialized) {
-                notificationBadge.visibility = GONE
+                //mBottomNav!!.removeBadge(3)
+                /*notificationBadge.visibility = GONE
                 itemView.removeView(notificationBadge)
-                mBottomNav?.removeView(notificationBadge)
+                mBottomNav?.removeView(notificationBadge)*/
             }
         }
     }
