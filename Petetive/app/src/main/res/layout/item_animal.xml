@@ -7,6 +7,7 @@
     app:cardCornerRadius="3dp">
     
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -39,6 +40,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:visibility="gone"
             android:textColor="#FF000000"
             app:layout_constraintEnd_toEndOf="@+id/txtLocalidade"
             app:layout_constraintTop_toBottomOf="@+id/txtLocalidade"
@@ -57,9 +59,8 @@
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/txtDescricao"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
             android:textColor="#FF000000"
             app:layout_constraintEnd_toEndOf="@+id/txtLocalidade"
             app:layout_constraintTop_toBottomOf="@+id/txtRaca"

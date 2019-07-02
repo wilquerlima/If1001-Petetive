@@ -36,6 +36,7 @@ class ProcurarFragment : Fragment(), RequestCallback {
             adapter = RecyclerViewAdapter(petList, ctx)
             addItemDecoration(ItemDecorationRecycler(20))
         }
+
        //val key = FirebaseMethods.petRef.push().key
 
         //FirebaseMethods.petRef.child(key!!).setValue(Pet("","Teste local", "Paulo", "Foi achado em Ouro Preto", "Fila Brasileiro", "3LJ5AO6H1JPlNi6cFZjYntldehY2", null))
