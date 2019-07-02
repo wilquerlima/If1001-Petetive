@@ -1,50 +1,38 @@
 package br.ufpe.cin.petetive.view.fragment
 
+import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
-import androidx.fragment.app.Fragment
-import androidx.core.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileInputStream
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import br.ufpe.cin.petetive.R
-import com.squareup.picasso.Picasso
-import br.ufpe.cin.petetive.data.Pet
 import br.ufpe.cin.petetive.controller.FirebaseMethods
+import br.ufpe.cin.petetive.data.Pet
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.UploadTask
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.cadastrar_pet_fragment.*
 import kotlinx.android.synthetic.main.cadastrar_pet_fragment.view.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.support.v4.ctx
 import org.jetbrains.anko.support.v4.toast
-import com.squareup.picasso.NetworkPolicy
-import com.squareup.picasso.MemoryPolicy
-import android.annotation.SuppressLint
-import android.graphics.BitmapFactory
-import android.net.Uri
-import android.os.Build
-import android.os.Environment
-import androidx.core.content.FileProvider
-import com.google.android.gms.tasks.OnSuccessListener
-import java.io.FileOutputStream
+import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.IOException
-import java.nio.file.Files.createFile
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -55,6 +43,7 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
     lateinit var dialog: DialogInterface
     lateinit var currentPhotoPath: String
     lateinit var urlImagePet: String
+    var selectedImage: Uri? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.cadastrar_pet_fragment, container, false)
@@ -72,12 +61,8 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
             R.id.btn_cadastrar_pet -> {
                 setProgress(true)
 
-
                 if (checkValues()) {
-                    toast("Seu Pet foi Cadastrado com sucesso")
                     cadastrar()
-
-                    setProgress(false)
                 } else {
                     setProgress(false)
                 }
@@ -117,6 +102,10 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
                 editRaca.error = "É necessário informar uma raça."
                 false
             }
+            selectedImage == null -> {
+                toast("É necessário informar uma foto.")
+                false
+            }
             else -> true
         }
 
@@ -147,7 +136,7 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun dispatchTakePictureIntent() {
+    /*private fun dispatchTakePictureIntent() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             // Ensure that there's a camera activity to handle the intent
             takePictureIntent.resolveActivity(ctx.packageManager)?.also {
@@ -170,7 +159,7 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
                 }
             }
         }
-    }
+    }*/
 
     @SuppressLint("SimpleDateFormat")
     @Throws(IOException::class)
@@ -203,20 +192,28 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
         startActivityForResult(intent, CHOOSE_GALLERY_CODE)
     }
 
+    private fun getImageUri( inImage: Bitmap): Uri {
+        val bytes = ByteArrayOutputStream()
+        inImage.compress(Bitmap.CompressFormat.JPEG, 80, bytes)
+        val path = MediaStore.Images.Media.insertImage (ctx.contentResolver, inImage, "Title", null);
+        return Uri.parse(path)
+    }
+
     @SuppressLint("SimpleDateFormat")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == RESULT_OK) {
             when (requestCode) {
                 CHOOSE_CAMERA_CODE -> {
                     dialog.dismiss()
-                    /*Picasso.get()
-                        .load(currentPhotoPath)
-                        .memoryPolicy(MemoryPolicy.NO_CACHE)
-                        .networkPolicy(NetworkPolicy.NO_CACHE)
-                        .into(photo)*/
+
                     val imageBitmap = data!!.extras!!.get("data") as Bitmap
                     photo.setImageBitmap(imageBitmap)
+                    selectedImage = getImageUri(imageBitmap)
                     default_foto.visibility = View.GONE
+                    Picasso.get()
+                        .load(selectedImage)
+                        .error(R.mipmap.placeholder)
+                        .into(photo)
                     /*val bitmaps = BitmapFactory.decodeStream(contentResolver.openInputStream(imageUri))
                     picture!!.setImageBitmap(bitmaps)
 
@@ -262,9 +259,7 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
                 }
                 CHOOSE_GALLERY_CODE -> {
                     dialog.dismiss()
-                    val selectedImage = data!!.data
-                    val idPet = FirebaseMethods.petRef.push().key
-                    val ref = FirebaseMethods.storageRef.child("images/$idPet/photo.png")
+                    selectedImage = data!!.data
 
                     //desse jeito funciona, mas eu acho que demorou um pouco
                     /*val uploadTask = ref.putFile(selectedImage!!).addOnSuccessListener {
@@ -275,21 +270,6 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
 
                         }
                     }*/
-                    //desse jeito é como ta na documentação, eu achei mais rapido
-                    val uploadTask = ref.putFile(selectedImage!!)
-                    uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
-                        if (!task.isSuccessful) {
-                            task.exception?.let {
-                                throw it
-                            }
-                        }
-                        return@Continuation ref.downloadUrl
-                    }).addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            urlImagePet = it.result.toString()
-                        }
-                    }
-
 
                     Picasso.get()
                         .load(selectedImage)
@@ -355,19 +335,40 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
     }
 
     private fun cadastrar() {
-        val key = FirebaseMethods.petRef.push().key
-
+        val idPet = FirebaseMethods.petRef.push().key
+        val ref = FirebaseMethods.storageRef.child("images/$idPet/photo.png")
         val usersId = FirebaseMethods.mAuth.currentUser?.uid.toString()
-        FirebaseMethods.petRef.child(key!!).setValue(
-            Pet(
-                urlImagePet,
-                editLocal.text.toString(),
-                editNome.text.toString(),
-                editDescricao.text.toString(),
-                editRaca.text.toString(),
-                usersId,
-                null
-            )
-        )
+
+        val uploadTask = ref.putFile(selectedImage!!)
+        uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
+            if (!task.isSuccessful) {
+                task.exception?.let {
+                    throw it
+                }
+            }
+            return@Continuation ref.downloadUrl
+        }).addOnCompleteListener {
+            if (it.isSuccessful) {
+                urlImagePet = it.result.toString()
+                FirebaseMethods.petRef.child(idPet!!).setValue(
+                    Pet(
+                        urlImagePet,
+                        editLocal.text.toString(),
+                        editNome.text.toString(),
+                        editDescricao.text.toString(),
+                        editRaca.text.toString(),
+                        usersId,
+                        null
+                    )
+                ).addOnCompleteListener {
+                    setProgress(false)
+                    toast("Cadastrado com sucesso")
+                }.addOnFailureListener {
+                    setProgress(false)
+                    toast("Erro no cadastro")
+                }
+            }
+        }
+
     }
 }

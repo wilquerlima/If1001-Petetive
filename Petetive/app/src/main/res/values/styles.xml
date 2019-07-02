@@ -34,7 +34,6 @@
     <style name="TextLabel" parent="Base.Widget.MaterialComponents.TextInputLayout">
         <item name="android:textColorHint">@color/corSecundaria</item>
         <item name="android:textColorHighlight">@color/corSecundaria</item>
-        <item name="android:textColorLink">@color/corSecundaria</item>
         <item name="colorAccent">@color/corSecundaria</item>
         <item name="colorControlNormal">@color/corSecundaria</item>
         <item name="colorControlActivated">@color/corSecundaria</item>
