@@ -54,6 +54,7 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
     val CHOOSE_GALLERY_CODE = 102
     lateinit var dialog: DialogInterface
     lateinit var currentPhotoPath: String
+    lateinit var urlImagePet: String
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.cadastrar_pet_fragment, container, false)
@@ -262,16 +263,15 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
                 CHOOSE_GALLERY_CODE -> {
                     dialog.dismiss()
                     val selectedImage = data!!.data
-                    val path = selectedImage!!.path
-                    val idPet = FirebaseMethods.petRef.push().key
-
-                    var file = Uri.fromFile(File(path))
-                    val ref = FirebaseMethods.storageRef.child("images/$idPet/photo")
+                    val ref = FirebaseMethods.storageRef.child("images")
 
                     //desse jeito funciona, mas eu acho que demorou um pouco
                     val uploadTask = ref.putFile(selectedImage).addOnSuccessListener {
                         ref.downloadUrl.addOnSuccessListener {
+
                             val url = it
+                            urlImagePet = url.toString()
+
                         }.addOnFailureListener {
 
                         }
@@ -362,7 +362,7 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
         val usersId = FirebaseMethods.mAuth.currentUser?.uid.toString()
         FirebaseMethods.petRef.child(key!!).setValue(
             Pet(
-                "",
+                urlImagePet,
                 editLocal.text.toString(),
                 editNome.text.toString(),
                 editDescricao.text.toString(),
