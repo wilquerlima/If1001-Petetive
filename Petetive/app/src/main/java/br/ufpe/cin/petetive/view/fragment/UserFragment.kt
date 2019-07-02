@@ -2,11 +2,14 @@ package br.ufpe.cin.petetive.view.fragment
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import br.ufpe.cin.petetive.R
 import br.ufpe.cin.petetive.controller.FirebaseMethods
+import br.ufpe.cin.petetive.controller.ProfileDialog
 import br.ufpe.cin.petetive.controller.RequestCallback
 import br.ufpe.cin.petetive.controller.Session
 import br.ufpe.cin.petetive.controller.Session.userLogged
@@ -14,7 +17,7 @@ import br.ufpe.cin.petetive.data.User
 import br.ufpe.cin.petetive.view.activity.HomeActivity
 import kotlinx.android.synthetic.main.user_fragment.*
 import kotlinx.android.synthetic.main.user_fragment.view.*
-import org.jetbrains.anko.okButton
+import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.act
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.support.v4.ctx
@@ -36,6 +39,10 @@ class UserFragment : Fragment(), RequestCallback {
 
         view.logout.setOnClickListener{
             FirebaseMethods.signOut(act)
+        }
+
+        view.profileImage.setOnClickListener {
+            ProfileDialog().show(fragmentManager,"")
         }
 
         return view

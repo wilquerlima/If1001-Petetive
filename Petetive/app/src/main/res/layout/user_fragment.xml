@@ -1,128 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background">
 
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/card_info_perfil"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.25"
-        android:elevation="3dp">
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/round_image_layer"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="10dp"
+            android:id="@+id/profileImage" />
 
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <android.support.v7.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/card_info_perfil"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:elevation="3dp"
+            app:layout_constraintTop_toBottomOf="@+id/profileImage">
 
-            <android.support.design.widget.TextInputLayout
+            <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:theme="@style/TextLabelPerfil"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:id="@+id/textInputLayout5">
+                android:layout_height="wrap_content">
 
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/edit_perfil_telefone"
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:hint="@string/hint_telefone" />
-            </android.support.design.widget.TextInputLayout>
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:theme="@style/TextLabelPerfil"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:id="@+id/textInputLayout5">
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:theme="@style/TextLabelPerfil"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout5"
-                app:layout_constraintEnd_toEndOf="@+id/textInputLayout5"
-                app:layout_constraintStart_toStartOf="@+id/textInputLayout5"
-                android:id="@+id/textInputLayout6">
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/edit_perfil_telefone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:hint="@string/hint_telefone" />
+                </android.support.design.widget.TextInputLayout>
 
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/edit_perfil_email"
-                    android:layout_width="match_parent"
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:hint="@string/email" />
-            </android.support.design.widget.TextInputLayout>
+                    android:layout_marginTop="10dp"
+                    android:theme="@style/TextLabelPerfil"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout5"
+                    app:layout_constraintEnd_toEndOf="@+id/textInputLayout5"
+                    app:layout_constraintStart_toStartOf="@+id/textInputLayout5"
+                    android:id="@+id/textInputLayout6">
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="0dp"
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/edit_perfil_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress"
+                        android:hint="@string/email" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:theme="@style/TextLabelPerfil"
+                    app:layout_constraintEnd_toEndOf="@+id/textInputLayout5"
+                    app:layout_constraintStart_toStartOf="@+id/textInputLayout5"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout6"
+                    android:id="@+id/textInputLayout7"
+                    android:layout_marginBottom="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/edit_perfil_nome"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:hint="@string/nome" />
+                </android.support.design.widget.TextInputLayout>
+            </android.support.constraint.ConstraintLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/btn_atualizar_perfil"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:elevation="3dp"
+            app:layout_constraintTop_toBottomOf="@+id/card_info_perfil"
+            app:layout_constraintEnd_toEndOf="@+id/card_info_perfil"
+            app:layout_constraintStart_toStartOf="@+id/card_info_perfil">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:theme="@style/TextLabelPerfil"
-                app:layout_constraintEnd_toEndOf="@+id/textInputLayout5"
-                app:layout_constraintStart_toStartOf="@+id/textInputLayout5"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout6"
-                android:id="@+id/textInputLayout7"
+                android:text="@string/atualizar"
+                android:textSize="17sp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
-                app:layout_constraintBottom_toBottomOf="parent">
+                android:drawablePadding="15dp"
+                android:drawableStart="@drawable/ic_edit"
+                android:textColor="@color/corPrimaria" />
+        </android.support.v7.widget.CardView>
 
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/edit_perfil_nome"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:hint="@string/nome" />
-            </android.support.design.widget.TextInputLayout>
-        </android.support.constraint.ConstraintLayout>
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView
-        android:id="@+id/btn_atualizar_perfil"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:elevation="3dp"
-        app:layout_constraintTop_toBottomOf="@+id/card_info_perfil"
-        app:layout_constraintEnd_toEndOf="@+id/card_info_perfil"
-        app:layout_constraintStart_toStartOf="@+id/card_info_perfil">
-
-        <android.support.v7.widget.AppCompatTextView
-            android:layout_width="wrap_content"
+        <android.support.v7.widget.CardView
+            android:id="@+id/logout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/atualizar"
-            android:textSize="17sp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="7dp"
             android:layout_marginBottom="15dp"
-            android:drawablePadding="15dp"
-            android:drawableStart="@drawable/ic_edit"
-            android:textColor="@color/corPrimaria" />
-    </android.support.v7.widget.CardView>
+            android:elevation="3dp"
+            app:layout_constraintTop_toBottomOf="@+id/btn_atualizar_perfil"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/logout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
-        android:elevation="3dp"
-        app:layout_constraintTop_toBottomOf="@+id/btn_atualizar_perfil">
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:drawablePadding="15dp"
+                android:drawableStart="@drawable/ic_logout"
+                android:textColor="@color/corPrimaria"
+                android:text="Logout" />
 
-        <android.support.v7.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="17sp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:drawablePadding="15dp"
-            android:drawableStart="@drawable/ic_logout"
-            android:textColor="@color/corPrimaria"
-            android:text="Logout" />
-
-    </android.support.v7.widget.CardView>
-</android.support.constraint.ConstraintLayout>
+        </android.support.v7.widget.CardView>
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>
