@@ -1,4 +1,4 @@
-package br.ufpe.cin.petetive.controller
+package br.ufpe.cin.petetive.util.controllers
 
 interface RequestCallback {
     fun onSuccess(objects: Any)

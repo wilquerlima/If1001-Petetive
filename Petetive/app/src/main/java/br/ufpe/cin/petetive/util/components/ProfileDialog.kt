@@ -1,4 +1,4 @@
-package br.ufpe.cin.petetive.controller
+package br.ufpe.cin.petetive.util.components
 
 import android.app.Dialog
 import android.os.Bundle
@@ -9,6 +9,8 @@ import android.view.Window
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.RecyclerView
 import br.ufpe.cin.petetive.R
+import br.ufpe.cin.petetive.util.controllers.RequestCallback
+import br.ufpe.cin.petetive.util.adapters.RecyclerImagesAdapter
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import kotlinx.android.synthetic.main.profile_dialog.view.*
@@ -27,7 +29,7 @@ class ProfileDialog(var requestCallback: RequestCallback) : DialogFragment(){
         val layoutManager = FlexboxLayoutManager(ctx)
         layoutManager.flexDirection = FlexDirection.ROW
         recycleProfile!!.layoutManager = layoutManager
-        recycleProfile!!.adapter = RecyclerImagesAdapter(ctx,requestCallback)
+        recycleProfile!!.adapter = RecyclerImagesAdapter(ctx, requestCallback)
 
         view.cancelar.setOnClickListener {
             dialog?.dismiss()

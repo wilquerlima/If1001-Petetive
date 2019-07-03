@@ -22,4 +22,8 @@
     <string name="anexar_foto">Anexar foto</string>
     <string name="perdido">Pet perdido</string>
     <string name="pet_encontrado">Pet encontrado</string>
+    <string name="perdidos">Perdidos</string>
+    <string name="encontrados">Encontrados</string>
+    <string name="escolha_um_avatar">Escolha um avatar:</string>
+    <string name="cancelar">Cancelar</string>
 </resources>

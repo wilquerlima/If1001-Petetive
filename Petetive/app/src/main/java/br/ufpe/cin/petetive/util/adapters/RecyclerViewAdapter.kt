@@ -1,4 +1,4 @@
-package br.ufpe.cin.petetive.controller
+package br.ufpe.cin.petetive.util.adapters
 
 import android.content.Context
 import android.content.Intent
@@ -59,7 +59,13 @@ class RecyclerViewAdapter(
     }
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_animal, p0, false))
+        return ViewHolder(
+            LayoutInflater.from(context).inflate(
+                R.layout.item_animal,
+                p0,
+                false
+            )
+        )
     }
 
     override fun getItemCount(): Int {

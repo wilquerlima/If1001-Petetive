@@ -1,9 +1,9 @@
-package br.ufpe.cin.petetive.controller
+package br.ufpe.cin.petetive.util.controllers
 
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import br.ufpe.cin.petetive.controller.Session.userLogged
+import br.ufpe.cin.petetive.util.controllers.Session.userLogged
 import br.ufpe.cin.petetive.data.Pet
 import br.ufpe.cin.petetive.data.User
 import br.ufpe.cin.petetive.view.activity.LoginActivity
@@ -33,8 +33,9 @@ object FirebaseMethods {
         context.startActivity(Intent(context, LoginActivity::class.java))
     }
 
-    fun getPets(requestCallback: RequestCallback) {
-        FirebaseMethods.petRef.addValueEventListener(object : ValueEventListener {
+    fun getPets(requestCallback: RequestCallback, perdido: Boolean) {
+        val query = petRef.orderByChild("perdido").equalTo(perdido)
+        query.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 requestCallback.onError("Error petRef")
             }
@@ -50,7 +51,7 @@ object FirebaseMethods {
     }
 
     fun getUser(uid: String, requestCallback: RequestCallback) {
-        FirebaseMethods.userRef.child(uid).addValueEventListener(object : ValueEventListener {
+        userRef.child(uid).addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 requestCallback.onError("")
             }
@@ -64,7 +65,7 @@ object FirebaseMethods {
 
     fun atualizarUser(user: User, requestCallback: RequestCallback) {
         val currentUser = mAuth.currentUser
-        FirebaseMethods.userRef.child(currentUser!!.uid).setValue(user).addOnCompleteListener {
+        userRef.child(currentUser!!.uid).setValue(user).addOnCompleteListener {
             if (it.isSuccessful) {
                 requestCallback.onSuccess(it)
             } else {
@@ -83,9 +84,9 @@ object FirebaseMethods {
         requestCallback: RequestCallback
     ) {
 
-        val idPet = FirebaseMethods.petRef.push().key
-        val ref = FirebaseMethods.storageRef.child("images/$idPet/photo")
-        val usersId = FirebaseMethods.mAuth.currentUser?.uid.toString()
+        val idPet = petRef.push().key
+        val ref = storageRef.child("images/$idPet/photo")
+        val usersId = mAuth.currentUser?.uid.toString()
         var urlImagePet: String
 
         val uploadTask = ref.putFile(selectedImage)
@@ -99,7 +100,7 @@ object FirebaseMethods {
         }).addOnCompleteListener {
             if (it.isSuccessful) {
                 urlImagePet = it.result.toString()
-                FirebaseMethods.petRef.child(idPet!!).setValue(
+                petRef.child(idPet!!).setValue(
                     Pet(
                         urlImagePet,
                         local,
@@ -119,5 +120,31 @@ object FirebaseMethods {
                 requestCallback.onError("Houve um erro, tente novamente!")
             }
         }
+    }
+
+    fun createAccount(email: String, password: String, activity: LoginActivity, requestCallback: RequestCallback) {
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(activity) { task ->
+            if (task.isSuccessful) {
+                val currentUser = mAuth.currentUser
+                val user = User("", currentUser?.email!!)
+                userRef.child(currentUser.uid).setValue(user)
+                val list = listOf(currentUser.uid, "2")
+                requestCallback.onSuccess(list)
+            } else {
+                requestCallback.onError("Ocorreu um erro no cadastro")
+            }
+        }
+    }
+
+    fun signIn(email: String, password: String, activity: LoginActivity, requestCallback: RequestCallback) {
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(activity) { task ->
+                if (task.isSuccessful) {
+                    val currentUser = mAuth.currentUser
+                    val list = listOf(currentUser?.uid, "1")
+                    requestCallback.onSuccess(list)
+                } else {
+                    requestCallback.onError("Ocorreu um erro no login")
+                }
+            }
     }
 }

@@ -6,9 +6,9 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import br.ufpe.cin.petetive.R
-import br.ufpe.cin.petetive.controller.FirebaseMethods
-import br.ufpe.cin.petetive.controller.RequestCallback
-import br.ufpe.cin.petetive.controller.Session.userLogged
+import br.ufpe.cin.petetive.util.controllers.FirebaseMethods
+import br.ufpe.cin.petetive.util.controllers.RequestCallback
+import br.ufpe.cin.petetive.util.controllers.Session.userLogged
 import br.ufpe.cin.petetive.data.User
 import br.ufpe.cin.petetive.view.fragment.CadastrarPetFragment
 import br.ufpe.cin.petetive.view.fragment.MapFragment
@@ -19,7 +19,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.longToast
 
 
-class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener, RequestCallback {
+class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener,
+    RequestCallback {
 
     var mBottomNav: BottomNavigationView? = null
     var uid: String = ""

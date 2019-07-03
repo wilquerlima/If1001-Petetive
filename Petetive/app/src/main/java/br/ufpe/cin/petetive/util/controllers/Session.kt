@@ -1,6 +1,5 @@
-package br.ufpe.cin.petetive.controller
+package br.ufpe.cin.petetive.util.controllers
 
-import android.app.Application
 import br.ufpe.cin.petetive.data.User
 
 object Session{

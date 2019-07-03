@@ -17,8 +17,8 @@ import android.widget.RadioGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import br.ufpe.cin.petetive.R
-import br.ufpe.cin.petetive.controller.FirebaseMethods
-import br.ufpe.cin.petetive.controller.RequestCallback
+import br.ufpe.cin.petetive.util.controllers.FirebaseMethods
+import br.ufpe.cin.petetive.util.controllers.RequestCallback
 import br.ufpe.cin.petetive.view.activity.HomeActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.cadastrar_pet_fragment.*
@@ -112,7 +112,6 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener, RequestCallback, 
         }
 
     }
-
 
     private fun checkPermissions(permission: Int) {
 
@@ -259,13 +258,11 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener, RequestCallback, 
                         marginEnd = dip(10)
                         marginStart = dip(10)
                         topMargin = dip(10)
+                        bottomMargin = dip(10)
                     }.setOnClickListener {
                         checkPermissions(2)
                     }
                 }
-            }
-            cancelButton {
-
             }
         }.show()
     }

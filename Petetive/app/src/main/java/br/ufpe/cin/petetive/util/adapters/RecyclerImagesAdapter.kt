@@ -1,4 +1,4 @@
-package br.ufpe.cin.petetive.controller
+package br.ufpe.cin.petetive.util.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
 import br.ufpe.cin.petetive.R
+import br.ufpe.cin.petetive.util.controllers.RequestCallback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_image.view.*
 
@@ -26,7 +27,13 @@ class RecyclerImagesAdapter(var context: Context, var requestCallback: RequestCa
     }
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ViewHolder {
-        return RecyclerImagesAdapter.ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_image, p0, false))
+        return ViewHolder(
+            LayoutInflater.from(context).inflate(
+                R.layout.item_image,
+                p0,
+                false
+            )
+        )
     }
 
     override fun getItemCount(): Int {

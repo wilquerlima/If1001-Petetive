@@ -1,8 +1,8 @@
 package br.ufpe.cin.petetive.view.activity
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.View.GONE
+import androidx.appcompat.app.AppCompatActivity
 import br.ufpe.cin.petetive.R
 import br.ufpe.cin.petetive.data.Pet
 import com.squareup.picasso.Picasso
@@ -35,16 +35,16 @@ class PetDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun colocarInformacoes(){
-        if(!pet?.urlImage.isNullOrEmpty()){
+    private fun colocarInformacoes() {
+        if (!pet?.urlImage.isNullOrEmpty()) {
             Picasso.get().load(pet?.urlImage).into(imgPet)
-        }else{
+        } else {
             Picasso.get().load(R.mipmap.placeholder).into(imgPet)
         }
-        if(pet?.nome.isNullOrEmpty()){
+        if (pet?.nome.isNullOrEmpty()) {
             nome.visibility = GONE
             appCompatTextView2.visibility = GONE
-        }else{
+        } else {
             nome.text = pet?.nome
         }
         local.text = pet?.local

@@ -1,4 +1,4 @@
-package br.ufpe.cin.petetive.controller
+package br.ufpe.cin.petetive.util.components
 
 import android.graphics.Rect
 import androidx.recyclerview.widget.RecyclerView
