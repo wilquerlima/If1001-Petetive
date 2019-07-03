@@ -1,6 +1,5 @@
 package br.ufpe.cin.petetive.view.fragment
 
-import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.DialogInterface
 import android.content.Intent
@@ -9,21 +8,18 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.RadioGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import br.ufpe.cin.petetive.R
 import br.ufpe.cin.petetive.controller.FirebaseMethods
-import br.ufpe.cin.petetive.data.Pet
+import br.ufpe.cin.petetive.controller.RequestCallback
 import br.ufpe.cin.petetive.view.activity.HomeActivity
-import com.google.android.gms.tasks.Continuation
-import com.google.android.gms.tasks.Task
-import com.google.firebase.storage.UploadTask
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.cadastrar_pet_fragment.*
 import kotlinx.android.synthetic.main.cadastrar_pet_fragment.view.*
@@ -33,20 +29,15 @@ import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.support.v4.ctx
 import org.jetbrains.anko.support.v4.toast
 import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.*
 
 
-class CadastrarPetFragment : Fragment(), View.OnClickListener {
+class CadastrarPetFragment : Fragment(), View.OnClickListener, RequestCallback, RadioGroup.OnCheckedChangeListener {
 
-    val CHOOSE_CAMERA_CODE = 101
-    val CHOOSE_GALLERY_CODE = 102
+    private val CHOOSE_CAMERA_CODE = 101
+    private val CHOOSE_GALLERY_CODE = 102
     lateinit var dialog: DialogInterface
-    lateinit var currentPhotoPath: String
-    lateinit var urlImagePet: String
     var selectedImage: Uri? = null
+    private var perdido: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.cadastrar_pet_fragment, container, false)
@@ -55,15 +46,19 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
         view.default_foto.setOnClickListener(this)
         view.photo.setOnClickListener(this)
 
+        view.radioGroup.setOnCheckedChangeListener(this)
 
         return view
+    }
+
+    override fun onCheckedChanged(p0: RadioGroup?, p1: Int) {
+        perdido = p1 == R.id.perdido
     }
 
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.btn_cadastrar_pet -> {
                 setProgress(true)
-
                 if (checkValues()) {
                     cadastrar()
                 } else {
@@ -93,20 +88,24 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
 
     private fun checkValues(): Boolean {
         return when {
-            editLocal.text.toString().trim().isNullOrEmpty() -> {
+            editLocal.text.toString().trim().isEmpty() -> {
                 editLocal.error = "É necessário informar um local."
                 false
             }
-            editDescricao.text.toString().trim().isNullOrEmpty() -> {
+            editDescricao.text.toString().trim().isEmpty() -> {
                 editDescricao.error = "É necessário informar uma descrição."
                 false
             }
-            editRaca.text.toString().trim().isNullOrEmpty() -> {
+            editRaca.text.toString().trim().isEmpty() -> {
                 editRaca.error = "É necessário informar uma raça."
                 false
             }
             selectedImage == null -> {
                 toast("É necessário informar uma foto.")
+                false
+            }
+            radioGroup.checkedRadioButtonId == -1 -> {
+                toast("É necessário escolher uma das opções de pet.")
                 false
             }
             else -> true
@@ -115,7 +114,7 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
     }
 
 
-    fun checkPermissions(permission: Int) {
+    private fun checkPermissions(permission: Int) {
 
         when (permission) {
             1 -> {
@@ -139,7 +138,7 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    fun abrirCamera() {
+    private fun abrirCamera() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             takePictureIntent.resolveActivity(ctx.packageManager)?.also {
                 startActivityForResult(takePictureIntent, CHOOSE_CAMERA_CODE)
@@ -156,31 +155,31 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
     private fun getImageUri(inImage: Bitmap): Uri {
         val bytes = ByteArrayOutputStream()
         inImage.compress(Bitmap.CompressFormat.JPEG, 80, bytes)
-        val path = MediaStore.Images.Media.insertImage (ctx.contentResolver, inImage, "Title", null);
+        val path = MediaStore.Images.Media.insertImage(ctx.contentResolver, inImage, "Title", null)
         return Uri.parse(path)
     }
 
     private fun getFullImageUri(inImage: Bitmap): Uri {
         val bytes = ByteArrayOutputStream()
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-        val path = MediaStore.Images.Media.insertImage (ctx.contentResolver, inImage, "Title", null);
+        val path = MediaStore.Images.Media.insertImage(ctx.contentResolver, inImage, "Title", null)
         return Uri.parse(path)
     }
 
-    private fun getResizedBitmap( image:Bitmap, maxSize:Int) : Bitmap{
+    private fun getResizedBitmap(image: Bitmap, maxSize: Int): Bitmap {
         var width = image.width
         var height = image.height
 
-        val bitmapRatio = width.toFloat() /  height.toFloat()
+        val bitmapRatio = width.toFloat() / height.toFloat()
         if (bitmapRatio > 1) {
             width = maxSize
             height = ((width / bitmapRatio).toInt())
         } else {
             height = maxSize
-            width =  ((height * bitmapRatio).toInt())
+            width = ((height * bitmapRatio).toInt())
         }
         return Bitmap.createScaledBitmap(image, width, height, true)
-}
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == RESULT_OK) {
@@ -200,7 +199,7 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
                 CHOOSE_GALLERY_CODE -> {
                     dialog.dismiss()
                     selectedImage = data!!.data
-                    val bitmap = MediaStore.Images.Media.getBitmap(ctx.contentResolver, selectedImage)
+                    //val bitmap = MediaStore.Images.Media.getBitmap(ctx.contentResolver, selectedImage)
                     default_foto.visibility = View.GONE
 
                     val imageStream = ctx.contentResolver.openInputStream(selectedImage!!)
@@ -272,44 +271,28 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
     }
 
     private fun cadastrar() {
-        val idPet = FirebaseMethods.petRef.push().key
-        val ref = FirebaseMethods.storageRef.child("images/$idPet/photo")
-        val usersId = FirebaseMethods.mAuth.currentUser?.uid.toString()
+        FirebaseMethods.cadastrarPet(
+            editLocal.text.toString(),
+            editNome.text.toString(),
+            editDescricao.text.toString(),
+            editRaca.text.toString(),
+            perdido,
+            selectedImage!!,
+            this
+        )
+    }
 
-        val uploadTask = ref.putFile(selectedImage!!)
-        uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
-            if (!task.isSuccessful) {
-                task.exception?.let {
-                    throw it
-                }
-            }
-            return@Continuation ref.downloadUrl
-        }).addOnCompleteListener {
-            if (it.isSuccessful) {
-                urlImagePet = it.result.toString()
-                FirebaseMethods.petRef.child(idPet!!).setValue(
-                    Pet(
-                        urlImagePet,
-                        editLocal.text.toString(),
-                        editNome.text.toString(),
-                        editDescricao.text.toString(),
-                        editRaca.text.toString(),
-                        usersId,
-                        null
-                    )
-                ).addOnCompleteListener {
-                    setProgress(false)
-                    (act as HomeActivity).changeToFirstFragment()
-                    toast("Cadastrado com sucesso")
-                }.addOnFailureListener {
-                    setProgress(false)
-                    toast("Erro no cadastro")
-                }
-            }else{
-                setProgress(false)
-                toast("Houve um erro, tente novamente!")
-            }
-        }
+    override fun onSuccess(objects: Any) {
+        setProgress(false)
+        alert(objects.toString()) {
+            okButton { (act as HomeActivity).changeToFirstFragment() }
+        }.apply {
+            isCancelable = false
+        }.show()
+    }
 
+    override fun onError(msgError: String) {
+        setProgress(false)
+        toast(msgError)
     }
 }

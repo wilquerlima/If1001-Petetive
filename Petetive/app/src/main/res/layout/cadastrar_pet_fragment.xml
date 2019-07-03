@@ -137,16 +137,39 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <RadioGroup
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout4"
+            app:layout_constraintEnd_toEndOf="@+id/textInputLayout4"
+            app:layout_constraintStart_toStartOf="@+id/textInputLayout4"
+            android:id="@+id/radioGroup">
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/perdido"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/perdido" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/encontrado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="@string/pet_encontrado" />
+        </RadioGroup>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_cadastrar_pet"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/cadastrar_txt"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="20dp"
             style="@style/button_login"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout4"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup"
             app:layout_constraintEnd_toEndOf="@+id/textInputLayout4"
             app:layout_constraintStart_toStartOf="@+id/textInputLayout4"
             app:layout_constraintBottom_toBottomOf="parent" />
@@ -162,5 +185,4 @@
             app:layout_constraintTop_toTopOf="@+id/btn_cadastrar_pet"
             app:layout_constraintStart_toStartOf="@+id/btn_cadastrar_pet" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </ScrollView>

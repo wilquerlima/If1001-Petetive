@@ -12,5 +12,6 @@ data class Pet(
     val descricao: String = "",
     val raca: String = "",
     val uidUser: String = "",
-    val location: Location? = null
+    val location: Location? = null,
+    val perdido: Boolean = false
 ) : Serializable
