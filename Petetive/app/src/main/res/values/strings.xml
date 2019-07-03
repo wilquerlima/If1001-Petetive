@@ -14,4 +14,10 @@
     <string name="email">Email</string>
     <string name="nome">Nome</string>
     <string name="atualizar">Atualizar</string>
+    <string name="logout">Logout</string>
+    <string name="descricao">Descrição</string>
+    <string name="raca">Raça</string>
+    <string name="nome_apelido">Nome/Apelido</string>
+    <string name="local">Local</string>
+    <string name="anexar_foto">Anexar foto</string>
 </resources>

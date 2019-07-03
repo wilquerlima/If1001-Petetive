@@ -1,50 +1,41 @@
 package br.ufpe.cin.petetive.view.fragment
 
+import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
-import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileInputStream
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import br.ufpe.cin.petetive.R
-import com.squareup.picasso.Picasso
-import br.ufpe.cin.petetive.data.Pet
 import br.ufpe.cin.petetive.controller.FirebaseMethods
+import br.ufpe.cin.petetive.data.Pet
+import br.ufpe.cin.petetive.view.activity.HomeActivity
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.UploadTask
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.cadastrar_pet_fragment.*
 import kotlinx.android.synthetic.main.cadastrar_pet_fragment.view.*
 import org.jetbrains.anko.*
+import org.jetbrains.anko.support.v4.act
 import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.support.v4.ctx
 import org.jetbrains.anko.support.v4.toast
-import com.squareup.picasso.NetworkPolicy
-import com.squareup.picasso.MemoryPolicy
-import android.annotation.SuppressLint
-import android.graphics.BitmapFactory
-import android.net.Uri
-import android.os.Build
-import android.os.Environment
-import android.support.v4.content.FileProvider
-import com.google.android.gms.tasks.OnSuccessListener
-import java.io.FileOutputStream
+import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.IOException
-import java.nio.file.Files.createFile
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -54,6 +45,8 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
     val CHOOSE_GALLERY_CODE = 102
     lateinit var dialog: DialogInterface
     lateinit var currentPhotoPath: String
+    lateinit var urlImagePet: String
+    var selectedImage: Uri? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.cadastrar_pet_fragment, container, false)
@@ -71,12 +64,8 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
             R.id.btn_cadastrar_pet -> {
                 setProgress(true)
 
-
                 if (checkValues()) {
-                    toast("Seu Pet foi Cadastrado com sucesso")
                     cadastrar()
-
-                    setProgress(false)
                 } else {
                     setProgress(false)
                 }
@@ -116,6 +105,10 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
                 editRaca.error = "É necessário informar uma raça."
                 false
             }
+            selectedImage == null -> {
+                toast("É necessário informar uma foto.")
+                false
+            }
             else -> true
         }
 
@@ -146,158 +139,80 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun dispatchTakePictureIntent() {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            // Ensure that there's a camera activity to handle the intent
-            takePictureIntent.resolveActivity(ctx.packageManager)?.also {
-                // Create the File where the photo should go
-                val photoFile: File? = try {
-                    createImageFile()
-                } catch (ex: IOException) {
-                    // Error occurred while creating the File
-                    null
-                }
-                // Continue only if the File was successfully created
-                photoFile?.also {
-                    val photoURI: Uri = FileProvider.getUriForFile(
-                        ctx,
-                        "com.example.android.fileprovider",
-                        it
-                    )
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                    startActivityForResult(takePictureIntent, CHOOSE_CAMERA_CODE)
-                }
-            }
-        }
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    @Throws(IOException::class)
-    private fun createImageFile(): File {
-        // Create an image file name
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val storageDir: File = ctx.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
-        return File.createTempFile(
-            "JPEG_${timeStamp}_", /* prefix */
-            ".jpg", /* suffix */
-            storageDir /* directory */
-        ).apply {
-            // Save a file: path for use with ACTION_VIEW intents
-            currentPhotoPath = absolutePath
-        }
-    }
-
     fun abrirCamera() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             takePictureIntent.resolveActivity(ctx.packageManager)?.also {
                 startActivityForResult(takePictureIntent, CHOOSE_CAMERA_CODE)
             }
         }
-        //dispatchTakePictureIntent()
     }
 
-    fun abrirGaleria() {
+    private fun abrirGaleria() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
         intent.type = "image/*"
         startActivityForResult(intent, CHOOSE_GALLERY_CODE)
     }
 
-    @SuppressLint("SimpleDateFormat")
+    private fun getImageUri(inImage: Bitmap): Uri {
+        val bytes = ByteArrayOutputStream()
+        inImage.compress(Bitmap.CompressFormat.JPEG, 80, bytes)
+        val path = MediaStore.Images.Media.insertImage (ctx.contentResolver, inImage, "Title", null);
+        return Uri.parse(path)
+    }
+
+    private fun getFullImageUri(inImage: Bitmap): Uri {
+        val bytes = ByteArrayOutputStream()
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage (ctx.contentResolver, inImage, "Title", null);
+        return Uri.parse(path)
+    }
+
+    private fun getResizedBitmap( image:Bitmap, maxSize:Int) : Bitmap{
+        var width = image.width
+        var height = image.height
+
+        val bitmapRatio = width.toFloat() /  height.toFloat()
+        if (bitmapRatio > 1) {
+            width = maxSize
+            height = ((width / bitmapRatio).toInt())
+        } else {
+            height = maxSize
+            width =  ((height * bitmapRatio).toInt())
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true)
+}
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == RESULT_OK) {
             when (requestCode) {
                 CHOOSE_CAMERA_CODE -> {
                     dialog.dismiss()
-                    /*Picasso.get()
-                        .load(currentPhotoPath)
-                        .memoryPolicy(MemoryPolicy.NO_CACHE)
-                        .networkPolicy(NetworkPolicy.NO_CACHE)
-                        .into(photo)*/
+
                     val imageBitmap = data!!.extras!!.get("data") as Bitmap
                     photo.setImageBitmap(imageBitmap)
+                    selectedImage = getImageUri(imageBitmap)
                     default_foto.visibility = View.GONE
-                    /*val bitmaps = BitmapFactory.decodeStream(contentResolver.openInputStream(imageUri))
-                    picture!!.setImageBitmap(bitmaps)
-
-                    */
-
-                    /*
-                    val extras = data!!.extras
-                    var bitmap: Bitmap? = null
-                    if (extras != null) {
-                        bitmap = extras.get("data") as Bitmap
-                    }
-                    val file :File
-                    file = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        val current = LocalDateTime.now()
-                        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm:ss")
-                        val answer: String =  current.format(formatter)
-                        File.createTempFile(answer, null, ctx.cacheDir)
-                    } else {
-                        val date = Date()
-                        val formatter = SimpleDateFormat("dd MMM yyyy HH:mma")
-                        val answer: String = formatter.format(date)
-                        File.createTempFile(answer, null, ctx.cacheDir)
-                    }
-                    val fileOutputStream: FileOutputStream
-                    try {
-                        fileOutputStream = FileOutputStream(file)
-                        assert(bitmap != null)
-                        bitmap!!.compress(Bitmap.CompressFormat.PNG, 80, fileOutputStream)
-                        fileOutputStream.close()
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
-
-
-                    //exibe bitmap no img_artista
-                    Picasso.get().invalidate(file.path)
                     Picasso.get()
-                        .load(file)
-                        .memoryPolicy(MemoryPolicy.NO_CACHE)
-                        .networkPolicy(NetworkPolicy.NO_CACHE)
+                        .load(selectedImage)
+                        .error(R.mipmap.placeholder)
                         .into(photo)
-                    default_foto.visibility = View.GONE*/
                 }
                 CHOOSE_GALLERY_CODE -> {
                     dialog.dismiss()
-                    val selectedImage = data!!.data
-                    val path = selectedImage!!.path
-                    val idPet = FirebaseMethods.petRef.push().key
+                    selectedImage = data!!.data
+                    val bitmap = MediaStore.Images.Media.getBitmap(ctx.contentResolver, selectedImage)
+                    default_foto.visibility = View.GONE
 
-                    var file = Uri.fromFile(File(path))
-                    val ref = FirebaseMethods.storageRef.child("images/$idPet/photo")
+                    val imageStream = ctx.contentResolver.openInputStream(selectedImage!!)
+                    var selectedImagee = BitmapFactory.decodeStream(imageStream)
 
-                    //desse jeito funciona, mas eu acho que demorou um pouco
-                    val uploadTask = ref.putFile(selectedImage).addOnSuccessListener {
-                        ref.downloadUrl.addOnSuccessListener {
-                            val url = it
-                        }.addOnFailureListener {
-
-                        }
-                    }
-
-                    //desse jeito é como ta na documentação, eu achei mais rapido
-                    //val uploadTask = ref.putFile(selectedImage)
-                    /*val url = uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
-                        if (!task.isSuccessful) {
-                            task.exception?.let {
-                                throw it
-                            }
-                        }
-                        return@Continuation FirebaseMethods.storageRef.child("images/$idPet/photo.png").downloadUrl
-                    }).addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            val downloadUri = it.result
-                        }
-                    }*/
-
+                    selectedImagee = getResizedBitmap(selectedImagee, 400)
+                    selectedImage = getFullImageUri(selectedImagee)
 
                     Picasso.get()
                         .load(selectedImage)
                         .error(R.mipmap.placeholder)
                         .into(photo)
-                    default_foto.visibility = View.GONE
                 }
             }
         }
@@ -357,19 +272,44 @@ class CadastrarPetFragment : Fragment(), View.OnClickListener {
     }
 
     private fun cadastrar() {
-        val key = FirebaseMethods.petRef.push().key
-
+        val idPet = FirebaseMethods.petRef.push().key
+        val ref = FirebaseMethods.storageRef.child("images/$idPet/photo")
         val usersId = FirebaseMethods.mAuth.currentUser?.uid.toString()
-        FirebaseMethods.petRef.child(key!!).setValue(
-            Pet(
-                "",
-                editLocal.text.toString(),
-                editNome.text.toString(),
-                editDescricao.text.toString(),
-                editRaca.text.toString(),
-                usersId,
-                null
-            )
-        )
+
+        val uploadTask = ref.putFile(selectedImage!!)
+        uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
+            if (!task.isSuccessful) {
+                task.exception?.let {
+                    throw it
+                }
+            }
+            return@Continuation ref.downloadUrl
+        }).addOnCompleteListener {
+            if (it.isSuccessful) {
+                urlImagePet = it.result.toString()
+                FirebaseMethods.petRef.child(idPet!!).setValue(
+                    Pet(
+                        urlImagePet,
+                        editLocal.text.toString(),
+                        editNome.text.toString(),
+                        editDescricao.text.toString(),
+                        editRaca.text.toString(),
+                        usersId,
+                        null
+                    )
+                ).addOnCompleteListener {
+                    setProgress(false)
+                    (act as HomeActivity).changeToFirstFragment()
+                    toast("Cadastrado com sucesso")
+                }.addOnFailureListener {
+                    setProgress(false)
+                    toast("Erro no cadastro")
+                }
+            }else{
+                setProgress(false)
+                toast("Houve um erro, tente novamente!")
+            }
+        }
+
     }
 }

@@ -2,29 +2,21 @@ package br.ufpe.cin.petetive.view.activity
 
 import android.app.ProgressDialog
 import android.os.Bundle
-import android.support.design.internal.BottomNavigationItemView
-import android.support.design.internal.BottomNavigationMenuView
-import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import br.ufpe.cin.petetive.R
 import br.ufpe.cin.petetive.controller.FirebaseMethods
 import br.ufpe.cin.petetive.controller.RequestCallback
+import br.ufpe.cin.petetive.controller.Session.userLogged
 import br.ufpe.cin.petetive.data.User
 import br.ufpe.cin.petetive.view.fragment.CadastrarPetFragment
 import br.ufpe.cin.petetive.view.fragment.MapFragment
 import br.ufpe.cin.petetive.view.fragment.ProcurarFragment
 import br.ufpe.cin.petetive.view.fragment.UserFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.longToast
-import android.view.View.GONE
-import android.view.View.VISIBLE
-import br.ufpe.cin.petetive.controller.Session.userLogged
-
-
 
 
 class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener, RequestCallback {
@@ -32,15 +24,7 @@ class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     var mBottomNav: BottomNavigationView? = null
     var uid: String = ""
     var user: User? = null
-    lateinit var notificationBadge: View
     var dialog: ProgressDialog? = null
-
-    var fragment1 = ProcurarFragment()
-    var fragment2 = CadastrarPetFragment()
-    var fragment3 = MapFragment()
-    var fragment4 = UserFragment()
-
-    var active : Fragment = fragment1
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,17 +33,11 @@ class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         uid = intent.getStringExtra("uid")
         FirebaseMethods.getUser(uid, this)
-        //dialog = indeterminateProgressDialog(message = "Aguarde um momento...")
-        //dialog?.setCanceledOnTouchOutside(false)
-        //setProgress(true)
-        /*supportFragmentManager.beginTransaction().add(R.id.framelayout, fragment4,"4").hide(fragment4).commit()
-        supportFragmentManager.beginTransaction().add(R.id.framelayout, fragment3,"3").hide(fragment3).commit()
-        supportFragmentManager.beginTransaction().add(R.id.framelayout, fragment2,"2").hide(fragment2).commit()
-        supportFragmentManager.beginTransaction().add(R.id.framelayout, fragment1,"1").commit()*/
 
-        mBottomNav = findViewById(R.id.bottom_navigation)
+        mBottomNav = bottom_navigation
         mBottomNav?.setOnNavigationItemSelectedListener(this)
         mBottomNav?.selectedItemId = R.id.menu_item_procurar
+
     }
 
     private fun setProgress(active : Boolean){
@@ -95,29 +73,21 @@ class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
         when (p0.itemId) {
             R.id.menu_item_procurar -> {
-                /*supportFragmentManager.beginTransaction().hide(active).show(fragment1).commit()
-                active = fragment1*/
                 supportFragmentManager.beginTransaction().apply {
                     replace(R.id.framelayout, ProcurarFragment())
                 }.commit()
             }
             R.id.menu_item_cadastrar -> {
-                /*supportFragmentManager.beginTransaction().hide(active).show(fragment2).commit()
-                active = fragment2*/
                 supportFragmentManager.beginTransaction().apply {
                     replace(R.id.framelayout, CadastrarPetFragment())
                 }.commit()
             }
             R.id.menu_item_map -> {
-                /*supportFragmentManager.beginTransaction().hide(active).show(fragment3).commit()
-                active = fragment3*/
                 supportFragmentManager.beginTransaction().apply {
                     replace(R.id.framelayout, MapFragment())
                 }.commit()
             }
             R.id.menu_item_user -> {
-                /*supportFragmentManager.beginTransaction().hide(active).show(fragment4).commit()
-                active = fragment4*/
                 supportFragmentManager.beginTransaction().apply {
                     replace(R.id.framelayout, UserFragment())
                 }.commit()
@@ -141,21 +111,10 @@ class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     }
 
     private fun setUpBadge() {
-        val menuView = mBottomNav?.getChildAt(0) as BottomNavigationMenuView
-        val itemView = menuView.getChildAt(3) as BottomNavigationItemView
-
         if (user?.email.isNullOrBlank() || user?.telefone.isNullOrBlank() || user?.nome.isNullOrEmpty()) {
-
-            notificationBadge = LayoutInflater.from(this).inflate(R.layout.custom_perfil, menuView, false)
-            itemView.addView(notificationBadge)
-
-
+            mBottomNav!!.showBadge(R.id.menu_item_user)
         } else {
-            if (this::notificationBadge.isInitialized) {
-                notificationBadge.visibility = GONE
-                itemView.removeView(notificationBadge)
-                mBottomNav?.removeView(notificationBadge)
-            }
+            mBottomNav!!.removeBadge(R.id.menu_item_user)
         }
     }
 }

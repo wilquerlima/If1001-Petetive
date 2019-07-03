@@ -1,17 +1,16 @@
 package br.ufpe.cin.petetive.controller
 
 import android.content.Context
-import android.support.v4.widget.ImageViewCompat
-import android.support.v7.widget.AppCompatImageView
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.recyclerview.widget.RecyclerView
 import br.ufpe.cin.petetive.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_image.view.*
 
-class RecyclerImagesAdapter(var context: Context) : RecyclerView.Adapter<RecyclerImagesAdapter.ViewHolder>() {
+class RecyclerImagesAdapter(var context: Context, var requestCallback: RequestCallback) : RecyclerView.Adapter<RecyclerImagesAdapter.ViewHolder>() {
 
     val listImages = listOf(
         R.mipmap.woman01, R.mipmap.woman02, R.mipmap.woman03, R.mipmap.woman04,
@@ -41,6 +40,10 @@ class RecyclerImagesAdapter(var context: Context) : RecyclerView.Adapter<Recycle
             .error(R.mipmap.user)
             .fit()
             .into(p0.image)
+
+        p0.image.setOnClickListener{
+            requestCallback.onSuccess(listImages[p1])
+        }
     }
 
 }

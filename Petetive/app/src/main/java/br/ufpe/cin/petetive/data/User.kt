@@ -7,5 +7,6 @@ import java.io.Serializable
 data class User(
     val nome: String? = "",
     val email: String? = "",
-    val telefone: String? = ""
+    val telefone: String? = "",
+    val idAvatar: String? = ""
 ) : Serializable
