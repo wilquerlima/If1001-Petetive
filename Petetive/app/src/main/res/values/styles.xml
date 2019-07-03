@@ -26,11 +26,6 @@
         <item name="android:backgroundTint">#373495</item>
     </style>
 
-    <style name="editText_login">
-        <item name="colorControlActivated">@color/corSecundaria</item>
-        <item name="colorControlHighlight">@color/corSecundaria</item>
-    </style>
-
     <style name="TextLabel" parent="Base.Widget.MaterialComponents.TextInputLayout">
         <item name="android:textColorHint">@color/corSecundaria</item>
         <item name="android:textColorHighlight">@color/corSecundaria</item>
@@ -44,36 +39,6 @@
     <style name="TextLimitStyle" parent="TextAppearance.AppCompat.Small">
         <item name="android:textColor">@color/corPrimaria</item>
         <item name="android:textSize">17sp</item>
-    </style>
-
-    <style name="TextLabelCadastro" parent="TextAppearance.AppCompat.Medium">
-        <item name="android:textColorHint">#FF000000</item>
-        <item name="android:textColorHighlight">#FF000000</item>
-        <item name="android:textColorLink">#FF000000</item>
-        <item name="colorAccent">#FF000000</item>
-        <item name="colorControlNormal">#FF000000</item>
-        <item name="colorControlActivated">#FF000000</item>
-    </style>
-
-    <style name="TextLabelPerfil" parent="TextAppearance.AppCompat.Medium">
-        <item name="android:textColorHint">@color/corPrimaria</item>
-        <item name="android:textColorHighlight">@color/corPrimaria</item>
-        <item name="android:textColorLink">@color/corPrimaria</item>
-        <item name="colorAccent">@color/corPrimaria</item>
-        <item name="colorControlNormal">@color/corPrimaria</item>
-        <item name="colorControlActivated">@color/corPrimaria</item>
-    </style>
-
-    <style name="FilleBoxCustom" parent="Base.Widget.MaterialComponents.TextInputLayout">
-        <item name="android:theme">@style/TextLabelCadastro</item>
-        <item name="boxBackgroundMode">outline</item>
-        <item name="boxBackgroundColor">@color/background</item>
-        <item name="boxCollapsedPaddingTop">10dp</item>
-        <item name="android:textColorHint">#FF000000</item>
-        <item name="boxCornerRadiusBottomStart">0dp</item>
-        <item name="boxCornerRadiusBottomEnd">0dp</item>
-        <item name="boxCornerRadiusTopStart">0dp</item>
-        <item name="boxCornerRadiusTopEnd">0dp</item>
     </style>
 
     <style name="textview">
