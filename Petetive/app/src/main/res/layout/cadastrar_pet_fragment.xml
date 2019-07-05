@@ -4,11 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/photo"
             android:layout_width="match_parent"
             android:layout_height="200dp"
@@ -19,7 +19,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/default_foto"
             android:layout_width="match_parent"
             android:layout_height="200dp"
@@ -29,16 +29,15 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:background="@drawable/stroke_image"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
+            android:background="@drawable/stroke_image">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textViewInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableTop="@drawable/ic_photo_camera"
                 android:gravity="center"
-                android:text="Enviar foto"
+                android:text="@string/anexar_foto"
                 android:drawablePadding="10dp"
                 android:textColor="#FF000000"
                 android:textSize="20sp"
@@ -47,99 +46,130 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-        </android.support.constraint.ConstraintLayout >
+        </androidx.constraintlayout.widget.ConstraintLayout >
 
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="@+id/photo"
             app:layout_constraintStart_toStartOf="@+id/photo"
             android:layout_marginTop="10dp"
-            android:theme="@style/TextLabelCadastro"
+            style="@style/Base.Widget.MaterialComponents.TextInputLayout"
             app:layout_constraintTop_toBottomOf="@+id/photo"
             android:id="@+id/textInputLayout">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editLocal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Local" />
-        </android.support.design.widget.TextInputLayout>
+                style="@style/Base.Widget.MaterialComponents.TextInputEditText"
+                android:imeOptions="actionNext"
+                android:hint="@string/local" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/textInputLayout2"
-            android:theme="@style/TextLabelCadastro"
+            style="@style/Base.Widget.MaterialComponents.TextInputLayout"
             android:layout_marginTop="10dp"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
             app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
             app:layout_constraintStart_toStartOf="@+id/textInputLayout">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editNome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Nome/Apelido" />
-        </android.support.design.widget.TextInputLayout>
+                style="@style/Base.Widget.MaterialComponents.TextInputEditText"
+                android:imeOptions="actionNext"
+                android:hint="@string/nome_apelido" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:theme="@style/TextLabelCadastro"
+            style="@style/Base.Widget.MaterialComponents.TextInputLayout"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
             app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
             app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
             android:id="@+id/textInputLayout3">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editRaca"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Raça" />
+                style="@style/Base.Widget.MaterialComponents.TextInputEditText"
+                android:imeOptions="actionNext"
+                android:hint="@string/raca" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout3"
             app:layout_constraintEnd_toEndOf="@+id/textInputLayout3"
             app:layout_constraintStart_toStartOf="@+id/textInputLayout3"
-            style="@style/FilleBoxCustom"
+            style="@style/Base.Widget.MaterialComponents.TextInputLayout"
             app:counterEnabled="true"
             app:counterMaxLength="200"
             app:counterTextAppearance="@style/TextLimitStyle"
             android:id="@+id/textInputLayout4">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editDescricao"
                 android:layout_width="match_parent"
+                style="@style/Base.Widget.MaterialComponents.TextInputEditText"
                 android:layout_height="150dp"
                 android:paddingTop="10dp"
                 android:paddingStart="10dp"
+                android:imeOptions="actionDone"
                 android:gravity="top"
                 android:maxLength="200"
                 android:background="@null"
-                android:hint="Descrição" />
+                android:hint="@string/descricao" />
 
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
+        <RadioGroup
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout4"
+            app:layout_constraintEnd_toEndOf="@+id/textInputLayout4"
+            app:layout_constraintStart_toStartOf="@+id/textInputLayout4"
+            android:id="@+id/radioGroup">
 
-        <Button
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/perdido"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/perdido" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/encontrado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="@string/pet_encontrado" />
+        </RadioGroup>
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_cadastrar_pet"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/cadastrar_txt"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="20dp"
             style="@style/button_login"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout4"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup"
             app:layout_constraintEnd_toEndOf="@+id/textInputLayout4"
             app:layout_constraintStart_toStartOf="@+id/textInputLayout4"
             app:layout_constraintBottom_toBottomOf="parent" />
@@ -154,6 +184,5 @@
             app:layout_constraintEnd_toEndOf="@+id/btn_cadastrar_pet"
             app:layout_constraintTop_toTopOf="@+id/btn_cadastrar_pet"
             app:layout_constraintStart_toStartOf="@+id/btn_cadastrar_pet" />
-    </android.support.constraint.ConstraintLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

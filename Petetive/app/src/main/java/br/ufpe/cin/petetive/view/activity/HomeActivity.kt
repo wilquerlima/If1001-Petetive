@@ -1,26 +1,31 @@
 package br.ufpe.cin.petetive.view.activity
 
+import android.app.ProgressDialog
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
-import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import br.ufpe.cin.petetive.R
-import br.ufpe.cin.petetive.controller.FirebaseMethods
+import br.ufpe.cin.petetive.util.controllers.FirebaseMethods
+import br.ufpe.cin.petetive.util.controllers.RequestCallback
+import br.ufpe.cin.petetive.util.controllers.Session.userLogged
 import br.ufpe.cin.petetive.data.User
 import br.ufpe.cin.petetive.view.fragment.CadastrarPetFragment
 import br.ufpe.cin.petetive.view.fragment.MapFragment
 import br.ufpe.cin.petetive.view.fragment.ProcurarFragment
 import br.ufpe.cin.petetive.view.fragment.UserFragment
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.longToast
 
-class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
+
+class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener,
+    RequestCallback {
 
     var mBottomNav: BottomNavigationView? = null
-    var uid : String = ""
+    var uid: String = ""
     var user: User? = null
+    var dialog: ProgressDialog? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,23 +33,45 @@ class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         setContentView(R.layout.activity_main)
 
         uid = intent.getStringExtra("uid")
-        FirebaseMethods.userRef.child(uid).addValueEventListener(object : ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {
+        FirebaseMethods.getUser(uid, this)
 
-            }
-
-            override fun onDataChange(p0: DataSnapshot) {
-                user = p0.getValue(User::class.java)
-            }
-
-        })
-
-        mBottomNav = findViewById(R.id.bottom_navigation)
+        mBottomNav = bottom_navigation
         mBottomNav?.setOnNavigationItemSelectedListener(this)
+        mBottomNav?.selectedItemId = R.id.menu_item_procurar
+
+    }
+
+    private fun setProgress(active : Boolean){
+        if (active) {
+            dialog?.show()
+        } else {
+            dialog?.dismiss()
+        }
+    }
+
+    override fun onSuccess(objects: Any) {
+        if (objects is User) {
+            user = objects
+            userLogged = objects
+        }
+        setUpBadge()
+        //setProgress(false)
+    }
+
+    fun changeToFirstFragment(){
         mBottomNav?.selectedItemId = R.id.menu_item_procurar
     }
 
+    override fun onError(msgError: String) {
+        longToast(msgError)
+        //setProgress(false)
+    }
+
+
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
+        if(user != null){
+            setUpBadge()
+        }
         when (p0.itemId) {
             R.id.menu_item_procurar -> {
                 supportFragmentManager.beginTransaction().apply {
@@ -81,6 +108,14 @@ class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             mBottomNav?.selectedItemId = R.id.menu_item_procurar
         } else {
             super.onBackPressed()
+        }
+    }
+
+    private fun setUpBadge() {
+        if (user?.email.isNullOrBlank() || user?.telefone.isNullOrBlank() || user?.nome.isNullOrEmpty()) {
+            mBottomNav!!.showBadge(R.id.menu_item_user)
+        } else {
+            mBottomNav!!.removeBadge(R.id.menu_item_user)
         }
     }
 }

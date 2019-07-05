@@ -1,7 +1,7 @@
-package br.ufpe.cin.petetive.controller
+package br.ufpe.cin.petetive.util.components
 
 import android.graphics.Rect
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 
 class ItemDecorationRecycler(val height: Int) : RecyclerView.ItemDecoration(){
